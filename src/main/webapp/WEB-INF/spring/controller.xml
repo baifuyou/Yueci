@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id = "autoLogin" class = "com.scratbai.yueci.controller.AutoLogin">
+		<property name="userService" ref = "userService"></property>
+	</bean>
+	
+	<bean id = "login" class = "com.scratbai.yueci.controller.Login">
+		<property name="userService" ref = "userService">
+		</property>
+	</bean>
+	
+	<bean id = "home" class = "com.scratbai.yueci.controller.Home">
+		<property name="userService" ref = "userService"></property>
+	</bean>
+	
+	<bean id = "register" class = "com.scratbai.yueci.controller.Register">
+		<property name="userService" ref = "userService"></property>
+	</bean>
+	
+</beans>

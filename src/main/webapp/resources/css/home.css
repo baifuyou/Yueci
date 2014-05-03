@@ -1,0 +1,47 @@
+#searchResult {
+	padding-top: 20px;
+	font-size: 18px;
+}
+#remindLogin {
+	padding-bottom: 10px;
+}
+
+#searchBox {
+	padding-top: 10px;
+	font-size: 18px;
+}
+
+.wordInput {
+	#margin-left:160px;
+	width: 600px;
+	margin-right: 10px;
+	font-size: 22px;
+}
+
+.toggle {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	text-decoration: none
+}
+
+.pronounceButton {
+	border: 0px;
+}
+
+hr {
+	size: 20;
+	padding-top: 0px;
+	margin-top: 0px;
+}
+
+.wordName {
+	font-weight: 700;
+	font-size: 24px;
+}
+.container {
+	width: 800px;
+}
+body {
+	background-color: dddddd;
+}
+

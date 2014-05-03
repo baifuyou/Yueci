@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id = "mongo" class= "com.scratbai.yueci.dao.MongoFactory">	
+	</bean>
+	
+	<bean id = "morphia" class = "com.scratbai.yueci.dao.MorphiaFactory">
+		<property name = "mapPackages">
+			<array>
+				<value>com.scratbai.yueci.commonstest.pojo</value>
+			</array>
+		</property>
+	</bean>
+	
+	<bean id = "datastore" class = "com.scratbai.yueci.dao.DatastoreFactory">
+		<property name="mongo" ref = "mongo"></property>
+		<property name="morphia" ref = "morphia"></property>
+	</bean>
+	
+	<bean id = "userDao" class = "com.scratbai.yueci.dao.UserDaoImpl">
+		<property name="datastore" ref = "datastore"></property>
+		<property name="db" ref = "db"></property>
+	</bean>
+	
+	<bean id = "db" class = "com.scratbai.yueci.dao.DBFactory">
+		<property name="mongo" ref = "mongo"></property>
+	</bean>
+	
+</beans>
