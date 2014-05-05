@@ -23,14 +23,14 @@ import com.scratbai.yueci.pojo.*;
 
 public class SaveChineseWordTask implements Runnable {
 	
-	@Autowired
 	private UserDao userDao;
 	private String protoData;
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public SaveChineseWordTask(String protoData) {
+	public SaveChineseWordTask(String protoData, UserDao userDao) {
 		this.protoData = protoData;
+		this.userDao = userDao;
 	}
 
 	@Override

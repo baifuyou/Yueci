@@ -133,7 +133,6 @@ public class UserServiceImpl implements UserService {
 		logger.debug("not login user" + " request :" + word);
 		StringBuilder protoData = getProtoResponseData(word);
 		protoData = regulateJson(protoData);
-		logger.debug(protoData.toString());
 		saveWordData(word, protoData);
 		StringBuilder response = buildResponse(protoData, word);
 		return response.toString();
@@ -141,9 +140,15 @@ public class UserServiceImpl implements UserService {
 	
 	private void saveWordData(String word, StringBuilder protoData) {
 		if (CommonUtils.isChinese(word)) {
-			exec.execute(new SaveChineseWordTask(protoData.toString()));
+			if (!userDao.isExistedInChineseWord(word)) {
+				logger.debug("word :" + word + "is not existed");
+				exec.execute(new SaveChineseWordTask(protoData.toString(), userDao));
+			}
 		} else {
-			exec.execute(new SaveEnglishWordTask(protoData.toString(), userDao));
+			if (!userDao.isExistedInEnglishWord(word)) {
+				logger.debug("word :" + word + " is not existed");
+				exec.execute(new SaveEnglishWordTask(protoData.toString(), userDao));
+			}
 		}
 	}
 

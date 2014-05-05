@@ -3,6 +3,9 @@ package com.scratbai.yueci.pojo;
 
 import java.util.List;
 
+import org.mongodb.morphia.annotations.Entity;
+
+@Entity
 public class ChineseWord{
    	private List<SymbolC> symbols;
    	private String word_id;

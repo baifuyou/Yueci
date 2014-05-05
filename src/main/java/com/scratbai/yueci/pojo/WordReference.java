@@ -5,7 +5,7 @@ import java.util.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
-@Entity("words")
+@Entity
 public class WordReference {
 	@Id
 	private ObjectId id;

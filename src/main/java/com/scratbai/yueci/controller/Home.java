@@ -41,7 +41,6 @@ public class Home {
 		} else {
 			response = userService.searchWord(user, word);
 		}
-		logger.debug(response);
 		return response;
 	}
 	

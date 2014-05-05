@@ -37,4 +37,8 @@ public interface UserDao {
 
 	boolean isExistedInWordBook(User user, String word);
 
+	boolean isExistedInEnglishWord(String wordName);
+
+	boolean isExistedInChineseWord(String wordName);
+
 }

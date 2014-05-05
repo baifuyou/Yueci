@@ -130,4 +130,20 @@ public class UserDaoImpl implements UserDao {
 		return query.get() != null;
 	}
 
+	@Override
+	public boolean isExistedInChineseWord(String wordName) {
+		Query<ChineseWord> query = datastore.createQuery(ChineseWord.class)
+				.filter("word_name =", wordName)
+				.retrievedFields(true, "word_name");
+		return query.get() != null;
+	}
+
+	@Override
+	public boolean isExistedInEnglishWord(String wordName) {
+		Query<EnglishWord> query = datastore.createQuery(EnglishWord.class)
+				.filter("word_name =", wordName)
+				.retrievedFields(true, "word_name");
+		return query.get() != null;
+	}
+
 }
