@@ -19,6 +19,7 @@ public class CommonUtils {
 	private static final int SYMBOLS_LENGTH = SYMBOLS.length;
 	private static final Logger logger = LoggerFactory
 			.getLogger(CommonUtils.class);
+	private static final Map<String, String> keyValueCache = new HashMap<String, String>();
 
 	public static String generateEmailAuthCode(String uid) {
 		return encrypt(uid);
@@ -53,20 +54,17 @@ public class CommonUtils {
 			String emailAddress) {
 		InputStream serverConfigStream = CommonUtils.class.getClassLoader()
 				.getResourceAsStream("mailServerConfig.properties");
-		InputStream accountConfigStream = CommonUtils.class.getClassLoader()
-				.getResourceAsStream("mailAccountConfig.properties");
+
 		Properties serverConfig = new Properties();
-		Properties accountConfig = new Properties();
 		try {
 			serverConfig.load(serverConfigStream);
-			accountConfig.load(accountConfigStream);
 			Session session = Session.getInstance(serverConfig);
 			Message message = new MimeMessage(session);
 			message.setSubject(topic);
 			message.setText(content);
 			message.setContent(content, "text/html;charset = UTF-8");
-			String mailAccount = accountConfig.getProperty("account");
-			String mailPassword = accountConfig.getProperty("password");
+			String mailAccount = getConfigValue("mailAccountConfig.properties", "account");
+			String mailPassword = getConfigValue("mailAccountConfig.properties", "password");
 			message.setFrom(new InternetAddress(mailAccount));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(
 					emailAddress));
@@ -90,11 +88,14 @@ public class CommonUtils {
 	 * 从配置文件fileName中读取key的值 如果fileName不存在或者key不存在，将返回null
 	 */
 	public static String getConfigValue(String fileName, String key) {
+		String cacheKey = fileName + ":" + key;
+		String cacheValue = keyValueCache.get(cacheKey);
+		if (cacheValue != null) {
+			return cacheValue;
+		}
 		InputStream configStream = CommonUtils.class.getClassLoader()
 				.getResourceAsStream(fileName);
 		Properties config = new Properties();
-		logger.debug("config == null ?" + (config == null));
-		logger.debug("configStream == null ?" + (configStream == null));
 		try {
 			config.load(configStream);
 		} catch (IOException e) {
@@ -107,6 +108,7 @@ public class CommonUtils {
 			logger.debug("key: " + key + "is no exist in config file: "
 					+ fileName);
 		}
+		keyValueCache.put(cacheKey, value);
 		return value;
 	}
 

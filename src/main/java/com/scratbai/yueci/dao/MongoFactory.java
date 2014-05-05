@@ -6,6 +6,7 @@ import java.util.*;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 import com.mongodb.*;
+import com.scratbai.yueci.commons.CommonUtils;
 
 public class MongoFactory extends AbstractFactoryBean<Mongo> {
 
@@ -20,12 +21,16 @@ public class MongoFactory extends AbstractFactoryBean<Mongo> {
 				.getResourceAsStream(DEFAULT_MONGODB_CONFIG_FILE_PATH);
 		Properties mongoConfig = new Properties();
 		mongoConfig.load(configStream);
-		String username = mongoConfig.getProperty("username");
-		String password = mongoConfig.getProperty("password");
-		String database = mongoConfig.getProperty("database");
-		String serverAddressStr = mongoConfig.getProperty("server_address");
-		int serverPort = Integer.parseInt(mongoConfig
-				.getProperty("server_port"));
+		String username = CommonUtils.getConfigValue(
+				DEFAULT_MONGODB_CONFIG_FILE_PATH, "username");
+		String password = CommonUtils.getConfigValue(
+				DEFAULT_MONGODB_CONFIG_FILE_PATH, "password");
+		String database = CommonUtils.getConfigValue(
+				DEFAULT_MONGODB_CONFIG_FILE_PATH, "database");
+		String serverAddressStr = CommonUtils.getConfigValue(
+				DEFAULT_MONGODB_CONFIG_FILE_PATH, "server_address");
+		int serverPort = Integer.parseInt(CommonUtils.getConfigValue(
+				DEFAULT_MONGODB_CONFIG_FILE_PATH, "server_port"));
 		logger.debug("username:" + username);
 		logger.debug("password:" + password);
 		logger.debug("database:" + database);

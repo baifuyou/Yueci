@@ -49,16 +49,7 @@ public class Register {
 		
 		userService.addWaitAuthUser(user);
 		
-		InputStream stream = this.getClass().getClassLoader().getResourceAsStream("webAppConfig.properties");
-		Properties webAppConfig = new Properties();
-		try {
-			webAppConfig.load(stream);
-		} catch (IOException e) {
-			logger.error("webAppConfig文件不能找到。该文件配置有网站的部署信息");
-			e.printStackTrace();
-			return "errorHandlerPage";
-		}
-		String domain = webAppConfig.getProperty("domain");
+		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "doamin");
 		String authPath = domain + "authRegisterEmail/";
 		userService.sendAuthEmail(uid, emailAuthCode, randomCode, uid, authPath);
 		return "register/registerSuccess";

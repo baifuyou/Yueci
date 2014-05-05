@@ -159,8 +159,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String searchWord(User user, String word) {
 		logger.debug("user:" + user.getUid() + " request :" + word);
-		StringBuilder response = getProtoResponseData(word);
-		response = buildResponse(user, response, word);
+		StringBuilder protoData = getProtoResponseData(word);
+		protoData = regulateJson(protoData);
+		saveWordData(word, protoData);
+		StringBuilder response = buildResponse(user, protoData, word);
 		return response.toString();
 	}
 	
@@ -183,17 +185,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private StringBuilder getProtoResponseData(String word) {
-		InputStream configStream = this.getClass().getClassLoader()
-				.getResourceAsStream("iciba.properties");
-		Properties icibaProp = new Properties();
-		try {
-			icibaProp.load(configStream);
-		} catch (IOException e) {
-			logger.error("iciba.properties配置文件找不到");
-			e.printStackTrace();
-			return null;
-		}
-		String apiKey = icibaProp.getProperty("key");
+		String apiKey = CommonUtils.getConfigValue("iciba.properties", "key");
 		try {
 			URL url = new URL("http://dict-co.iciba.com/api/dictionary.php?w="
 					+ word + "&key=" + apiKey + "&type=json");
