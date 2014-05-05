@@ -12,6 +12,7 @@ public class WordReference {
 	private String word;
 	private Set<String> relatedWords;
 	private String uid;
+	private boolean isChinese;
 	
 	public WordReference() {
 		
@@ -58,5 +59,13 @@ public class WordReference {
 
 	public void setUid(String uid) {
 		this.uid = uid;
+	}
+
+	public boolean getIsChinese() {
+		return isChinese;
+	}
+
+	public void setIsChinese(boolean isChinese) {
+		this.isChinese = isChinese;
 	}
 }

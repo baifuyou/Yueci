@@ -2,17 +2,23 @@ package com.scratbai.yueci.commons;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommonUtils {
-	
-	private static final char[] SYMBOLS = "qwertyuiopasdfghjklzxcvbnm1234567890._".toCharArray();
+
+	private static final char[] SYMBOLS = "qwertyuiopasdfghjklzxcvbnm1234567890._"
+			.toCharArray();
 	private static final int SYMBOLS_LENGTH = SYMBOLS.length;
+	private static final Logger logger = LoggerFactory
+			.getLogger(CommonUtils.class);
 
 	public static String generateEmailAuthCode(String uid) {
 		return encrypt(uid);
@@ -24,8 +30,12 @@ public class CommonUtils {
 	public static String generateRandomCode() {
 		return generateRandomCode(6);
 	}
-	
-	//生成length位随机码
+
+	public static String md5Hex(String str) {
+		return DigestUtils.md5Hex(str);
+	}
+
+	// 生成length位随机码
 	public static String generateRandomCode(int length) {
 		Random random = new Random(System.currentTimeMillis());
 		char[] randomCode = new char[length];
@@ -74,6 +84,35 @@ public class CommonUtils {
 		}
 
 		return true;
+	}
+
+	/*
+	 * 从配置文件fileName中读取key的值 如果fileName不存在或者key不存在，将返回null
+	 */
+	public static String getConfigValue(String fileName, String key) {
+		InputStream configStream = CommonUtils.class.getClassLoader()
+				.getResourceAsStream(fileName);
+		Properties config = new Properties();
+		logger.debug("config == null ?" + (config == null));
+		logger.debug("configStream == null ?" + (configStream == null));
+		try {
+			config.load(configStream);
+		} catch (IOException e) {
+			logger.error("config file: " + fileName + "not found");
+			e.printStackTrace();
+			return null;
+		}
+		String value = config.getProperty(key);
+		if (value == null) {
+			logger.debug("key: " + key + "is no exist in config file: "
+					+ fileName);
+		}
+		return value;
+	}
+
+	public static boolean isChinese(String word) {
+		String isChinese = "^[\u4e00-\u9fa5]+$";
+		return Pattern.matches(isChinese, word);
 	}
 
 }

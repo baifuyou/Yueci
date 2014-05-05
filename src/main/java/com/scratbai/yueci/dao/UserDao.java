@@ -1,5 +1,7 @@
 package com.scratbai.yueci.dao;
 
+import com.scratbai.yueci.pojo.ChineseWord;
+import com.scratbai.yueci.pojo.EnglishWord;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.WaitAuthUser;
 
@@ -28,5 +30,11 @@ public interface UserDao {
 	void addWordToWordBook(User user, String word);
 
 	void removeWordFromWordBook(User user, String word);
+
+	void addEnglishWord(EnglishWord eWord);
+
+	void addChineseWord(ChineseWord cWord);
+
+	boolean isExistedInWordBook(User user, String word);
 
 }

@@ -3,6 +3,7 @@ package com.scratbai.yueci.service;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.slf4j.*;
 
@@ -14,6 +15,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserDao userDao;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Executor exec = Executors.newCachedThreadPool();
 	private static final int MilliSECCONDS_OF_HOURS = 3600000;
 
 	@Override
@@ -125,13 +127,44 @@ public class UserServiceImpl implements UserService {
 	public boolean isWaitAuthUidExist(String uid) {
 		return userDao.isWaitAuthUid(uid);
 	}
-	
+
 	@Override
 	public String searchWord(String word) {
 		logger.debug("not login user" + " request :" + word);
-		StringBuilder response = getProtoResponseData(word);
-		response = buildResponse(response,word);
+		StringBuilder protoData = getProtoResponseData(word);
+		protoData = regulateJson(protoData);
+		logger.debug(protoData.toString());
+		saveWordData(word, protoData);
+		StringBuilder response = buildResponse(protoData, word);
 		return response.toString();
+	}
+	
+	private void saveWordData(String word, StringBuilder protoData) {
+		if (CommonUtils.isChinese(word)) {
+			exec.execute(new SaveChineseWordTask(protoData.toString()));
+		} else {
+			exec.execute(new SaveEnglishWordTask(protoData.toString(), userDao));
+		}
+	}
+
+	private StringBuilder regulateJson(StringBuilder protoData) {
+		return new StringBuilder(regulateJson(protoData.toString()));
+	}
+
+	@Override
+	public String searchWord(User user, String word) {
+		logger.debug("user:" + user.getUid() + " request :" + word);
+		StringBuilder response = getProtoResponseData(word);
+		response = buildResponse(user, response, word);
+		return response.toString();
+	}
+	
+	/*
+	 * iciba返回的json有些不一致，该方法替换掉不一致的地方，使所有的json都变现出相同的结构
+	 */
+	private String regulateJson(String json) {
+		return json.replaceAll(
+				"(word_(pl|er|est|third|done|past|ing)\":)\"\"", "$1[]");
 	}
 
 	private StringBuilder buildResponse(StringBuilder response, String word) {
@@ -144,14 +177,6 @@ public class UserServiceImpl implements UserService {
 		return newResponse;
 	}
 
-	@Override
-	public String searchWord(User user, String word) {
-		logger.debug("user:" + user.getUid() + " request :" + word);
-		StringBuilder response = getProtoResponseData(word);
-		response = buildResponse(user,response,word);
-		return response.toString();
-	}
-	
 	private StringBuilder getProtoResponseData(String word) {
 		InputStream configStream = this.getClass().getClassLoader()
 				.getResourceAsStream("iciba.properties");
@@ -167,24 +192,25 @@ public class UserServiceImpl implements UserService {
 		try {
 			URL url = new URL("http://dict-co.iciba.com/api/dictionary.php?w="
 					+ word + "&key=" + apiKey + "&type=json");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			  connection.setDoOutput(true);  
-	             connection.setDoInput(true);  
-	             connection.setRequestMethod("GET");  
-	             connection.setInstanceFollowRedirects(true);  
-	               
-	             //设置http头 消息    
-	             connection.setRequestProperty("Accept","application/json");  
-	             connection.connect();  
-	             BufferedReader reader = new BufferedReader(new InputStreamReader(  
-	                     connection.getInputStream())); 
-	             String lines;  
-	             StringBuilder response = new StringBuilder("");  
-	             while ((lines = reader.readLine()) != null) {  
-	                 lines = new String(lines.getBytes(), "utf-8");  
-	                 response.append(lines);  
-	             }
-	             return response;
+			HttpURLConnection connection = (HttpURLConnection) url
+					.openConnection();
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setRequestMethod("GET");
+			connection.setInstanceFollowRedirects(true);
+
+			// 设置http头 消息
+			connection.setRequestProperty("Accept", "application/json");
+			connection.connect();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					connection.getInputStream()));
+			String lines;
+			StringBuilder response = new StringBuilder("");
+			while ((lines = reader.readLine()) != null) {
+				lines = new String(lines.getBytes(), "utf-8");
+				response.append(lines);
+			}
+			return response;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -193,10 +219,12 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	//在金山词霸返回的数据上面添加额外的数据
-	private StringBuilder buildResponse(User user, StringBuilder response,String word) {
-		boolean existInWordBook = isExistedInWordBook(user, word);
-		logger.debug("user:" + user.getUid() + " have " + word + "? " + existInWordBook);
+	// 在金山词霸返回的数据上面添加额外的数据
+	private StringBuilder buildResponse(User user, StringBuilder response,
+			String word) {
+		boolean existInWordBook = userDao.isExistedInWordBook(user, word);
+		logger.debug("user:" + user.getUid() + " have " + word + "? "
+				+ existInWordBook);
 		StringBuilder newResponse = new StringBuilder("{\"wordObject\":");
 		newResponse.append(response);
 		newResponse.append(",");
@@ -204,11 +232,6 @@ public class UserServiceImpl implements UserService {
 		newResponse.append(existInWordBook);
 		newResponse.append("}");
 		return newResponse;
-	}
-
-	private boolean isExistedInWordBook(User user, String word) {
-		Set<WordReference> wordReferences = user.getHighFrequencyWords();
-		return wordReferences == null ? false : wordReferences.contains(new WordReference(word, user.getUid()));
 	}
 
 	@Override
@@ -225,5 +248,4 @@ public class UserServiceImpl implements UserService {
 	public void removeWordFromWordBook(User user, String word) {
 		userDao.removeWordFromWordBook(user, word);
 	}
-
 }

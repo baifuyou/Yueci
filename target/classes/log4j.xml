@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.scratbai.lunadict">
+	<logger name="com.scratbai.yueci">
 		<level value="debug" />
 	</logger>
 	

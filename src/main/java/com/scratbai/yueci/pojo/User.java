@@ -1,7 +1,5 @@
 package com.scratbai.yueci.pojo;
 
-import java.util.*;
-
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
