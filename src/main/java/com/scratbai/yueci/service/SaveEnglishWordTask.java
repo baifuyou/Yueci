@@ -22,12 +22,14 @@ public class SaveEnglishWordTask implements Runnable {
 
 	private UserDao userDao;
 	private String protoData;
+	private ObjectMapper objectMapper;
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public SaveEnglishWordTask(String protoData, UserDao userDao) {
+	public SaveEnglishWordTask(String protoData, UserDao userDao, ObjectMapper objectMapper) {
 		this.protoData = protoData;
 		this.userDao = userDao;
+		this.setObjectMapper(objectMapper);
 	}
 
 	@Override
@@ -36,9 +38,11 @@ public class SaveEnglishWordTask implements Runnable {
 	}
 
 	private void saveWordData() {
-		ObjectMapper mapper = new ObjectMapper();
 		try {
-			EnglishWord eWord = mapper.readValue(protoData, EnglishWord.class);
+			EnglishWord eWord = objectMapper.readValue(protoData, EnglishWord.class);
+			if (eWord.getWord_name() == null) {
+				return;
+			}
 			saveMp3ToCDN(eWord);
 			userDao.addEnglishWord(eWord);
 		} catch (JsonParseException e) {
@@ -98,7 +102,7 @@ public class SaveEnglishWordTask implements Runnable {
 			symbol.setPh_tts_mp3(savePath);
 		}
 		try {
-			saveDataToCDN(saveKey, protoPath);
+			saveDataToCDN(saveKey, protoPath, "audio/mpeg");
 		} catch (AuthException e) {
 			logger.error("cdn auth error,Message:" + e.getMessage());
 			e.printStackTrace();
@@ -115,7 +119,7 @@ public class SaveEnglishWordTask implements Runnable {
 	/*
 	 * 访问cdn api，把指定path（http path）的数据存储到cdn上
 	 */
-	private void saveDataToCDN(String saveKey, String protoPath)
+	private void saveDataToCDN(String saveKey, String protoPath, String mimeType)
 			throws AuthException, JSONException, IOException {
 		String cdnConfig = "cdnConfig.properties";
 		Config.ACCESS_KEY = CommonUtils.getConfigValue(cdnConfig, "access_key");
@@ -127,6 +131,8 @@ public class SaveEnglishWordTask implements Runnable {
 		PutPolicy putPolicy = new PutPolicy(bucketName);
 		String uptoken = putPolicy.token(mac);
 		PutExtra extra = new PutExtra();
+		extra.mimeType = mimeType;
+		
 		URL url = new URL(protoPath);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		PutRet ret = IoApi.Put(uptoken, saveKey, connection.getInputStream(),
@@ -163,6 +169,14 @@ public class SaveEnglishWordTask implements Runnable {
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 
 }

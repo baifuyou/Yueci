@@ -11,7 +11,8 @@ public class User{
 	private String encryptedPwd;
 	private String nickname;
 	private String salt;
-
+	private String wordBookSpeechType;
+	
 	public ObjectId getId() {
 		return id;
 	}
@@ -50,5 +51,13 @@ public class User{
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public String getWordBookSpeechType() {
+		return wordBookSpeechType;
+	}
+
+	public void setWordBookSpeechType(String wordBookSpeechType) {
+		this.wordBookSpeechType = wordBookSpeechType;
 	}
 }

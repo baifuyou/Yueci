@@ -1,5 +1,7 @@
 package com.scratbai.yueci.dao;
 
+import java.util.*;
+
 import org.apache.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
@@ -144,6 +146,28 @@ public class UserDaoImpl implements UserDao {
 				.filter("word_name =", wordName)
 				.retrievedFields(true, "word_name");
 		return query.get() != null;
+	}
+
+	@Override
+	public List<EnglishWord> getWordFromWordBook(String uid,
+			int wordCountPerPage, int pageIndex) {
+		Query<WordReference> queryWordReference = datastore
+				.createQuery(WordReference.class).filter("uid =", uid)
+				.offset((pageIndex - 1) * wordCountPerPage)
+				.limit(wordCountPerPage);
+		List<WordReference> wordReferences = queryWordReference.asList();
+		List<EnglishWord> englishWords = new ArrayList<EnglishWord>();
+		for (WordReference wordRef : wordReferences) {
+			EnglishWord englishWord = datastore.find(EnglishWord.class,
+					"word_name =", wordRef.getWord()).get();
+			englishWords.add(englishWord);
+		}
+		return englishWords;
+	}
+
+	@Override
+	public long getWordsCountInWordBook(String uid) {
+		return datastore.find(WordReference.class).countAll();
 	}
 
 }

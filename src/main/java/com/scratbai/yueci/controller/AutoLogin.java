@@ -2,6 +2,8 @@ package com.scratbai.yueci.controller;
 
 import javax.servlet.http.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.*;
 
@@ -12,6 +14,8 @@ public class AutoLogin implements HandlerInterceptor {
 
 	@Autowired
 	private UserService userService;
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0,
@@ -27,6 +31,7 @@ public class AutoLogin implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object arg2) throws Exception {
+		
 		HttpSession session = request.getSession();
 		boolean isLogin = (Boolean) session.getAttribute("isLogin") == null ? false
 				: (Boolean) session.getAttribute("isLogin");

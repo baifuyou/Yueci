@@ -5,7 +5,7 @@ public class MeanC{
    	private String has_mean;
    	private String mean_id;
    	private String part_id;
-   	private Number split;
+   	private int split;
    	private String word_mean;
 
  	public String getHas_mean(){
@@ -26,10 +26,10 @@ public class MeanC{
 	public void setPart_id(String part_id){
 		this.part_id = part_id;
 	}
- 	public Number getSplit(){
+ 	public int getSplit(){
 		return this.split;
 	}
-	public void setSplit(Number split){
+	public void setSplit(int split){
 		this.split = split;
 	}
  	public String getWord_mean(){

@@ -13,28 +13,36 @@ import com.scratbai.yueci.service.UserService;
 
 @Controller
 public class Home {
-	
+
 	@Autowired
 	private UserService userService;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@RequestMapping("home")
 	public String home(HttpSession session, Model model) {
 		Object object = session.getAttribute("isLogin");
 		boolean isLogin = object == null ? false : (Boolean) object;
 		model.addAttribute("isLogin", session.getAttribute("isLogin"));
-		User user = (User)session.getAttribute("user");
+		User user = (User) session.getAttribute("user");
 		if (isLogin) {
-			model.addAttribute("user",user);
+			model.addAttribute("user", user);
 		}
 		return "home";
 	}
-	
+
+	@RequestMapping("home/search/{word}")
+	public String homeSearchBody(@PathVariable String word,
+			HttpSession session, Model model) {
+		model.addAttribute("word", word);
+		return home(session, model);
+	}
+
 	@RequestMapping("searchWord/{word}")
 	@ResponseBody
 	public String searchWord(@PathVariable String word, HttpSession session) {
 		logger.debug("request search:" + word);
-		User user = session.getAttribute("user") == null ? null : (User)session.getAttribute("user");
+		User user = session.getAttribute("user") == null ? null
+				: (User) session.getAttribute("user");
 		String response = null;
 		if (user == null) {
 			response = userService.searchWord(word);
@@ -43,10 +51,11 @@ public class Home {
 		}
 		return response;
 	}
-	
+
 	@RequestMapping("addWordToWordBook/{word}")
 	@ResponseBody
-	public String addWordToWordBook(HttpSession session, @PathVariable String word) {
+	public String addWordToWordBook(HttpSession session,
+			@PathVariable String word) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			logger.debug("not login user:" + " add " + word);
@@ -55,10 +64,11 @@ public class Home {
 		userService.addWordToWordBook(user, word);
 		return "{\"state\" : \"success\"}";
 	}
-	
+
 	@RequestMapping("removeWordFromWordBook/{word}")
 	@ResponseBody
-	public String removeWordFromWordBook(HttpSession session, @PathVariable String word) {
+	public String removeWordFromWordBook(HttpSession session,
+			@PathVariable String word) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			logger.debug("not login user:" + " remove " + word);

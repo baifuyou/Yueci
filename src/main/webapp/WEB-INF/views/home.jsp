@@ -125,5 +125,6 @@
 		</div>
 		<div id="relatedWordCW"></div>
 	</div>
+<label id = "searchRequestWord" class = "hidden">${word }</label>
 </body>
 </html>

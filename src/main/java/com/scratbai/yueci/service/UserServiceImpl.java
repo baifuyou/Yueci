@@ -7,6 +7,7 @@ import java.util.concurrent.*;
 
 import org.slf4j.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scratbai.yueci.commons.CommonUtils;
 import com.scratbai.yueci.dao.UserDao;
 import com.scratbai.yueci.pojo.*;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final Executor exec = Executors.newCachedThreadPool();
 	private static final int MilliSECCONDS_OF_HOURS = 3600000;
+	private ObjectMapper objectMapper;
 
 	@Override
 	public ValidateResult validate(String uid, String password) {
@@ -102,6 +104,11 @@ public class UserServiceImpl implements UserService {
 	public void changeToUserFromWaitAuthUser(String emailCode) {
 		WaitAuthUser waitAuthUser = userDao.getWaitAuthUser(emailCode);
 		User user = generateUser(waitAuthUser);
+		String userDefaultConfig = "userDefaultConfig.properties";
+		String wordBookSpeechType = CommonUtils.getConfigValue(
+				userDefaultConfig, "userDefaultSpeechType");
+		logger.debug(wordBookSpeechType);
+		user.setWordBookSpeechType(wordBookSpeechType);
 		userDao.addUser(user);
 		userDao.removeWaitAuthUser(waitAuthUser);
 	}
@@ -135,19 +142,22 @@ public class UserServiceImpl implements UserService {
 		protoData = regulateJson(protoData);
 		saveWordData(word, protoData);
 		StringBuilder response = buildResponse(protoData, word);
+		logger.debug(response.toString());
 		return response.toString();
 	}
-	
+
 	private void saveWordData(String word, StringBuilder protoData) {
 		if (CommonUtils.isChinese(word)) {
 			if (!userDao.isExistedInChineseWord(word)) {
 				logger.debug("word :" + word + "is not existed");
-				exec.execute(new SaveChineseWordTask(protoData.toString(), userDao));
+				exec.execute(new SaveChineseWordTask(protoData.toString(),
+						userDao, objectMapper));
 			}
 		} else {
 			if (!userDao.isExistedInEnglishWord(word)) {
 				logger.debug("word :" + word + " is not existed");
-				exec.execute(new SaveEnglishWordTask(protoData.toString(), userDao));
+				exec.execute(new SaveEnglishWordTask(protoData.toString(),
+						userDao, objectMapper));
 			}
 		}
 	}
@@ -165,13 +175,13 @@ public class UserServiceImpl implements UserService {
 		StringBuilder response = buildResponse(user, protoData, word);
 		return response.toString();
 	}
-	
+
 	/*
 	 * iciba返回的json有些不一致，该方法替换掉不一致的地方，使所有的json都变现出相同的结构
 	 */
 	private String regulateJson(String json) {
-		return json.replaceAll(
-				"(word_(pl|er|est|third|done|past|ing)\":)\"\"", "$1[]");
+		return json.replaceAll("(word_(pl|er|est|third|done|past|ing)\":)\"\"",
+				"$1[]");
 	}
 
 	private StringBuilder buildResponse(StringBuilder response, String word) {
@@ -244,5 +254,27 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void removeWordFromWordBook(User user, String word) {
 		userDao.removeWordFromWordBook(user, word);
+	}
+
+	@Override
+	public List<EnglishWord> getWordsFromWordBook(String uid,
+			int wordCountPerPage, int pageIndex) {
+		return userDao.getWordFromWordBook(uid, wordCountPerPage, pageIndex);
+	}
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
+
+	@Override
+	public long getPageCountInWordBook(String uid, int wordCountPerPage) {
+		long wordsCount = userDao.getWordsCountInWordBook(uid);
+		long pageCount = wordsCount % wordCountPerPage == 0 ? wordsCount
+				/ wordCountPerPage : wordsCount / wordCountPerPage + 1;
+		return pageCount;
 	}
 }

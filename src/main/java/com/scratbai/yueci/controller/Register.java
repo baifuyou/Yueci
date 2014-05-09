@@ -1,7 +1,5 @@
 package com.scratbai.yueci.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -49,7 +47,7 @@ public class Register {
 		
 		userService.addWaitAuthUser(user);
 		
-		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "doamin");
+		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "domain");
 		String authPath = domain + "authRegisterEmail/";
 		userService.sendAuthEmail(uid, emailAuthCode, randomCode, uid, authPath);
 		return "register/registerSuccess";

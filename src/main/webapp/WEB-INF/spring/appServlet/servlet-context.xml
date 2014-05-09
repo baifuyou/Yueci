@@ -10,11 +10,11 @@
 		infrastructure -->
 
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+    <annotation-driven/>
 
 	<interceptors>
 		<interceptor>
-			<mapping path="/*" />
+			<mapping path="/**"/>
 			<beans:bean class="com.scratbai.yueci.controller.AutoLogin"></beans:bean>
 		</interceptor>
 	</interceptors>

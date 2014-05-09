@@ -5,6 +5,10 @@
 	
 	<bean id = "userService" class = "com.scratbai.yueci.service.UserServiceImpl">
 		<property name="userDao" ref = "userDao"></property>
+		<property name = "objectMapper" ref = "objectMapper"></property>
+	</bean>
+	
+	<bean id = "objectMapper" class = "com.fasterxml.jackson.databind.ObjectMapper">
 	</bean>
 
 </beans>

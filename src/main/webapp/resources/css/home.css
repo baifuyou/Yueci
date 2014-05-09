@@ -42,6 +42,9 @@ hr {
 	width: 800px;
 }
 body {
-	background-color: dddddd;
+	background-color: #dddddd;
+}
+a {
+	cursor: pointer;
 }
 

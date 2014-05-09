@@ -1,5 +1,8 @@
 package com.scratbai.yueci.service;
 
+import java.util.List;
+
+import com.scratbai.yueci.pojo.EnglishWord;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.ValidateResult;
 import com.scratbai.yueci.pojo.WaitAuthUser;
@@ -37,4 +40,9 @@ public interface UserService {
 	public String searchWord(String word);
 
 	public void removeWordFromWordBook(User user, String word);
+
+	public List<EnglishWord> getWordsFromWordBook(String uid,
+			int wordCountPerPage, int pageIndex);
+
+	public long getPageCountInWordBook(String uid, int wordCountPerPage);
 }

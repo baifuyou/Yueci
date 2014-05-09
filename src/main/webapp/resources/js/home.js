@@ -46,7 +46,21 @@ $(function() {
 		}
 	});
 
+	searchRequestWord();
+	
 });
+
+/*
+ * 提供服务端渲染的模拟，从searchWord标签中获取word参数，
+ */
+function searchRequestWord() {
+	var word = $("#searchRequestWord").text();
+	console.log("searchRequestWord:" + word);
+	if (word == "" || word == null)
+		return
+	$("#searchWord").val(word);
+	$("#searchButton").click();
+}
 
 function changeComparisonToEnabled() {
 	$("#comparisonButton").removeAttr("disabled");

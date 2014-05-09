@@ -1,5 +1,7 @@
 package com.scratbai.yueci.dao;
 
+import java.util.List;
+
 import com.scratbai.yueci.pojo.ChineseWord;
 import com.scratbai.yueci.pojo.EnglishWord;
 import com.scratbai.yueci.pojo.User;
@@ -40,5 +42,10 @@ public interface UserDao {
 	boolean isExistedInEnglishWord(String wordName);
 
 	boolean isExistedInChineseWord(String wordName);
+
+	List<EnglishWord> getWordFromWordBook(String uid, int wordCountPerPage,
+			int pageIndex);
+
+	long getWordsCountInWordBook(String uid);
 
 }

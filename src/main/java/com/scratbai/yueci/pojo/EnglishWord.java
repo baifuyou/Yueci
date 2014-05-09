@@ -14,7 +14,7 @@ public class EnglishWord{
 	@JsonIgnore
 	private ObjectId id;
    	private ExchangeE exchange;
-   	private Number is_CRI;
+   	private int is_CRI;
    	@Embedded
    	private List<String> items;
    	@Embedded
@@ -27,10 +27,10 @@ public class EnglishWord{
 	public void setExchange(ExchangeE exchange){
 		this.exchange = exchange;
 	}
- 	public Number getIs_CRI(){
+ 	public int getIs_CRI(){
 		return this.is_CRI;
 	}
-	public void setIs_CRI(Number is_CRI){
+	public void setIs_CRI(int is_CRI){
 		this.is_CRI = is_CRI;
 	}
  	public List<String> getItems(){
