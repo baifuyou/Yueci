@@ -184,9 +184,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public PersistentUser getPersistentUserByPersistentId(String persistentId) {
-		logger.debug("getPersistentUserByPersistentId,persistentId:" + persistentId);
 		PersistentUser persistentUser =  datastore.find(PersistentUser.class, "persistentId =", persistentId).get();
-		logger.debug("persistentUser == null:" + (persistentUser == null));
 		return persistentUser;
 	}
 

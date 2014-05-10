@@ -303,7 +303,7 @@ public class UserServiceImpl implements UserService {
 		persistentUser.setEndTime(endTime);
 		persistentUser.setUid(uid);
 		String salt = CommonUtils.generateRandomCode(16);
-		String persistentId = CommonUtils.encrypt(uid + salt);
+		String persistentId = uid + "" + CommonUtils.encrypt(uid + salt);
 		persistentUser.setPersistentId(persistentId);
 		userDao.addPersistentLoginUser(persistentUser);
 		

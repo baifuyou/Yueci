@@ -59,7 +59,6 @@ public class AutoLogin implements HandlerInterceptor {
 	private void autoLogin(HttpSession session, String persistentId) {
 		PersistentUser persistentUser = userService.getPersistentUserByPersistentId(persistentId);
 		Date now = new Date(System.currentTimeMillis());
-		logger.debug("persistentUser == null :" + (persistentUser == null));
 		Date endTime = persistentUser.getEndTime();
 		if (endTime.after(now)) {
 			String uid = persistentUser.getUid();
