@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.scratbai.yueci.pojo.ChineseWord;
 import com.scratbai.yueci.pojo.EnglishWord;
+import com.scratbai.yueci.pojo.PersistentUser;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.WaitAuthUser;
 
@@ -47,5 +48,13 @@ public interface UserDao {
 			int pageIndex);
 
 	long getWordsCountInWordBook(String uid);
+
+	void addPersistentLoginUser(PersistentUser persistentUser);
+
+	PersistentUser getPersistentUserByPersistentId(String persistentId);
+
+	void deletePersistentUserByPersistentId(String persistentId);
+
+	void deletePersistentUserByUid(String uid);
 
 }

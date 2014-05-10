@@ -2,7 +2,10 @@ package com.scratbai.yueci.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.scratbai.yueci.pojo.EnglishWord;
+import com.scratbai.yueci.pojo.PersistentUser;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.ValidateResult;
 import com.scratbai.yueci.pojo.WaitAuthUser;
@@ -45,4 +48,13 @@ public interface UserService {
 			int wordCountPerPage, int pageIndex);
 
 	public long getPageCountInWordBook(String uid, int wordCountPerPage);
+
+	public void forgiveMe(HttpServletResponse response, String uid);
+
+	public PersistentUser getPersistentUserByPersistentId(String persistentId);
+
+	public void deletePersistentUserByPersistentId(String persistentId);
+
+	public void rememberMe(HttpServletResponse response, String uid,
+			int persistentLoginEffectiveSeconds);
 }

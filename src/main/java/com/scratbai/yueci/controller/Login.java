@@ -19,9 +19,9 @@ public class Login {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(Login.class);
-	private static final int MAX_LOGIN_EFFECTIVE_DAYS = 30;
+	private static final int PERSISTENT_LOGIN_EFFECTIVE_DAYS = 30;
 	private static final int STANDARD_LOGIN_EFFECTIVE_SECONDS = 1800;
-	private static final int MAX_LOGIN_EFFECTIVE_SECONDS = MAX_LOGIN_EFFECTIVE_DAYS * 24 * 60 * 60;
+	private static final int PERSISTENT_LOGIN_EFFECTIVE_SECONDS = PERSISTENT_LOGIN_EFFECTIVE_DAYS * 24 * 60 * 60;
 
 	@Autowired
 	private UserService userService;
@@ -33,7 +33,12 @@ public class Login {
 	}
 	
 	@RequestMapping("/login")
-	public String requestLogin(Model model) {
+	public String requestLogin(HttpSession session, Model model) {
+		Object user = session.getAttribute("user");
+		Object uid = session.getAttribute("uid");
+		if (user != null && uid != null) {
+			return "redirect:home";
+		}
 		model.addAttribute("errorInfo");
 		return "login";
 	}
@@ -45,9 +50,9 @@ public class Login {
 		ValidateResult validateResult = userService.validate(uid, password);
 		if (validateResult == ValidateResult.SUCCESS) {
 			if (rememberMe != null && rememberMe.length != 0) {
-				rememberMe(session);
+				rememberMe(response, uid);
 			} else {
-				forgiveMe(session);
+				forgiveMe(response, uid);
 			}
 			session.setAttribute("user", userService.getUser(uid));
 			session.setAttribute("isLogin", true);
@@ -64,12 +69,12 @@ public class Login {
 		return result;
 	}
 
-	private void forgiveMe(HttpSession session) {
-		session.setMaxInactiveInterval(STANDARD_LOGIN_EFFECTIVE_SECONDS);
+	private void forgiveMe(HttpServletResponse response, String uid) {
+		userService.forgiveMe(response, uid);
 	}
 
-	private void rememberMe(HttpSession session) {
-		session.setMaxInactiveInterval(MAX_LOGIN_EFFECTIVE_SECONDS);
+	private void rememberMe(HttpServletResponse response, String uid) {
+		userService.rememberMe(response, uid, PERSISTENT_LOGIN_EFFECTIVE_SECONDS);
 	}
 	
 	public UserService getUserService() {

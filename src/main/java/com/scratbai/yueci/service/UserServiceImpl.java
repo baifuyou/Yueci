@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import javax.servlet.http.*;
+
 import org.slf4j.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -276,5 +278,47 @@ public class UserServiceImpl implements UserService {
 		long pageCount = wordsCount % wordCountPerPage == 0 ? wordsCount
 				/ wordCountPerPage : wordsCount / wordCountPerPage + 1;
 		return pageCount;
+	}
+
+	@Override
+	public void forgiveMe(HttpServletResponse response, String uid) {
+		Cookie cookie = new Cookie("persistentId", "");
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		userDao.deletePersistentUserByUid(uid);
+	}
+
+	@Override
+	public void rememberMe(HttpServletResponse response, String uid, int persistentLoginEffectiveSeconds) {
+		userDao.deletePersistentUserByUid(uid);
+		PersistentUser persistentUser = new PersistentUser();
+		long nowTimeStamp = System.currentTimeMillis();
+		Date addTime = new Date(nowTimeStamp);
+		long endTimeStamp = nowTimeStamp + ((long)persistentLoginEffectiveSeconds) * 1000;
+		Date endTime = new Date(endTimeStamp);
+		logger.debug(((Long)nowTimeStamp).toString());
+		logger.debug("persistentLoginEffectiveSeconds:" + persistentLoginEffectiveSeconds);
+		logger.debug(((Long)endTimeStamp).toString());
+		persistentUser.setAddTime(addTime);
+		persistentUser.setEndTime(endTime);
+		persistentUser.setUid(uid);
+		String salt = CommonUtils.generateRandomCode(16);
+		String persistentId = CommonUtils.encrypt(uid + salt);
+		persistentUser.setPersistentId(persistentId);
+		userDao.addPersistentLoginUser(persistentUser);
+		
+		Cookie cookie = new Cookie("persistentId", persistentId);
+		cookie.setMaxAge(persistentLoginEffectiveSeconds);
+		response.addCookie(cookie);
+	}
+
+	@Override
+	public PersistentUser getPersistentUserByPersistentId(String persistentId) {
+		return userDao.getPersistentUserByPersistentId(persistentId);
+	}
+
+	@Override
+	public void deletePersistentUserByPersistentId(String persistentId) {
+		userDao.deletePersistentUserByPersistentId(persistentId);
 	}
 }

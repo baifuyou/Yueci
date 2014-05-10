@@ -2,9 +2,9 @@ package com.scratbai.yueci.dao;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
+import org.slf4j.*;
 
 import com.mongodb.*;
 import com.scratbai.yueci.commons.CommonUtils;
@@ -15,7 +15,7 @@ public class UserDaoImpl implements UserDao {
 	private Datastore datastore;
 	// MongoDB的DB对象，为了更加灵活的操作数据库，混合使用MongoDB Java Driver 和 Morphia
 	private DB db;
-	private Logger logger = Logger.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public String getEncryptedPwd(String uid) {
@@ -168,6 +168,33 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public long getWordsCountInWordBook(String uid) {
 		return datastore.find(WordReference.class).countAll();
+	}
+
+	@Override
+	public void deletePersistentUserByUid(String uid) {
+		Query<PersistentUser> query = datastore.createQuery(PersistentUser.class)
+				.filter("uid =", uid);
+		datastore.delete(query);
+	}
+
+	@Override
+	public void addPersistentLoginUser(PersistentUser persistentUser) {
+		datastore.save(persistentUser);
+	}
+
+	@Override
+	public PersistentUser getPersistentUserByPersistentId(String persistentId) {
+		logger.debug("getPersistentUserByPersistentId,persistentId:" + persistentId);
+		PersistentUser persistentUser =  datastore.find(PersistentUser.class, "persistentId =", persistentId).get();
+		logger.debug("persistentUser == null:" + (persistentUser == null));
+		return persistentUser;
+	}
+
+	@Override
+	public void deletePersistentUserByPersistentId(String persistentId) {
+		Query<PersistentUser> query = datastore.createQuery(PersistentUser.class)
+				.filter("persistentId =", persistentId);
+		datastore.delete(query);
 	}
 
 }
