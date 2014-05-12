@@ -195,4 +195,9 @@ public class UserDaoImpl implements UserDao {
 		datastore.delete(query);
 	}
 
+	@Override
+	public void saveUser(User user) {
+		datastore.save(user);
+	}
+
 }

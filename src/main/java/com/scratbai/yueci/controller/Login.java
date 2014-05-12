@@ -42,6 +42,7 @@ public class Login {
 		model.addAttribute("errorInfo");
 		return "login";
 	}
+	
 
 	@RequestMapping("/validate")
 	public String validate(@RequestParam String uid,

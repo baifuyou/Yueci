@@ -1,0 +1,46 @@
+.wordName {
+	font-size: 18px;
+	font-weight: bold;
+	padding-right: 10px;
+}
+
+.wordInformation {
+	margin-bottom: 5px;
+}
+
+.wordOperations {
+	margin-left: 1030px;
+	margin-top: 5px;
+}
+
+.wordOperations a {
+	margin-right:5px;
+}
+
+.wordMeans {
+	font-size:16px;
+}
+
+body {
+	background-color: #eee;
+}
+
+.words-list {
+	background: #f9f9f9;
+}
+
+.words-item {
+	background: #f9f9f9;
+}
+.wordPhonetic {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.wordMeans {
+	margin-left: 5px;
+}
+
+a {
+	cursor: pointer;
+}

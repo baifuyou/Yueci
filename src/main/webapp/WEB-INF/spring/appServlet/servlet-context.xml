@@ -17,6 +17,11 @@
 			<mapping path="/**"/>
 			<beans:bean class="com.scratbai.yueci.controller.AutoLogin"></beans:bean>
 		</interceptor>
+		<interceptor>
+			<mapping path="/user/**"/>
+			<mapping path="wordBook"/>
+			<beans:bean class="com.scratbai.yueci.controller.NotLoginFilter"></beans:bean>
+		</interceptor>
 	</interceptors>
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
 		up static resources in the ${webappRoot}/resources directory -->

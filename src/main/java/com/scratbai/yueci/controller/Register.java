@@ -31,7 +31,7 @@ public class Register {
 		if (userService.isUidExist(uid) || userService.isWaitAuthUidExist(uid)) {
 			return "register/registerFailure";
 		}
-		String emailAuthCode = CommonUtils.generateEmailAuthCode(uid);
+		String emailAuthCode = uid.replaceAll("[@.]", "");
 		String salt = CommonUtils.generateRandomCode(16);
 		String randomCode = CommonUtils.generateRandomCode();
 		String encryptedPwd = CommonUtils.encrypt(salt + password);

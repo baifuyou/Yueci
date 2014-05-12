@@ -28,10 +28,11 @@
 	border: 0px;
 }
 
-hr {
-	size: 20;
-	padding-top: 0px;
-	margin-top: 0px;
+.cutOffLine {
+	height:1px;
+	background-color:rgb(207, 198, 198);
+	margin-bottom:15px;
+	margin-top:5px;
 }
 
 .wordName {
@@ -42,9 +43,13 @@ hr {
 	width: 800px;
 }
 body {
-	background-color: #dddddd;
+	background-color: #eee;
 }
 a {
 	cursor: pointer;
+}
+
+.topBar a{
+	margin-right: 10px;
 }
 

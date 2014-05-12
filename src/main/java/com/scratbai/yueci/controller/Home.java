@@ -1,6 +1,6 @@
 package com.scratbai.yueci.controller;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,15 @@ public class Home {
 		if (isLogin) {
 			model.addAttribute("user", user);
 		}
+		return "home";
+	}
+	
+	@RequestMapping("logout")
+	public String logout(HttpServletResponse response, HttpSession session, Model model) {
+		String uid = (String)session.getAttribute("uid");
+		session.removeAttribute("user");
+		session.removeAttribute("uid");
+		userService.forgiveMe(response, uid);
 		return "home";
 	}
 
@@ -59,10 +68,10 @@ public class Home {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			logger.debug("not login user:" + " add " + word);
-			return "{\"state\" : \"not login\"}";
+			return JsonStatic.STATE_NOT_LOGIN;
 		}
 		userService.addWordToWordBook(user, word);
-		return "{\"state\" : \"success\"}";
+		return JsonStatic.STATE_SUCCESS;
 	}
 
 	@RequestMapping("removeWordFromWordBook/{word}")
@@ -72,11 +81,11 @@ public class Home {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			logger.debug("not login user:" + " remove " + word);
-			return "{\"state\" : \"not login\"}";
+			return JsonStatic.STATE_NOT_LOGIN;
 		}
 		logger.debug("user:" + user.getUid() + " remove " + word);
 		userService.removeWordFromWordBook(user, word);
-		return "{\"state\" : \"success\"}";
+		return JsonStatic.STATE_SUCCESS;
 	}
 
 	public UserService getUserService() {

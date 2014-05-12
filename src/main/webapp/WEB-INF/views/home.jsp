@@ -32,8 +32,8 @@
 				</div>
 			</c:if>
 			<c:if test="${isLogin eq true }">
-				<div>
-					欢迎您，<a href="user/${user.nickname }">${user.nickname }</a>
+				<div class = "topBar">
+					欢迎您，<a href="user">${user.nickname }</a> <a href="logout">注销</a>
 				</div>
 			</c:if>
 		</div>
@@ -66,7 +66,8 @@
 						</a>
 					</p>
 				</div>
-				<a class = "toggle" id = "toggleButton{{comparisonIndex}}{{index}}"><span>∧</span></a><hr/>
+				<a class = "toggle" id = "toggleButton{{comparisonIndex}}{{index}}"><span>∧</span></a>
+				<div class = "cutOffLine"></div>
 				<div id = "content{{comparisonIndex}}{{index}}">
 				<div>
 					英<span>:[{{symbol.ph_en}}]</span>
@@ -101,7 +102,7 @@
 				</a>
 				</div>
 				<div class = "wordName">{{symbol.wordName}}</div>
-				<hr></hr>
+				<div class = "cutOffLine"></div>
 				<div>
 					{{each symbol.means as wordMean wordIndex}}
 					<ul>

@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
 	/*
 	 * 做邮箱验证，输入参数里面包括一个邮箱表示码和一个随机码，两者必须与数据库中存储的数据相匹配
-	 * 才能验证成功，如果验证失败，会删除待验证用户信息，需要重新注册
+	 * 才能验证成功
 	 */
 	@Override
 	public boolean authEmail(String emailAuthCode, String randomCode,
@@ -85,17 +85,15 @@ public class UserServiceImpl implements UserService {
 		WaitAuthUser user = userDao.getWaitAuthUser(emailAuthCode);
 		String rightRandomCode = user.getRandomCode();
 		if (rightRandomCode == null || !rightRandomCode.equals(randomCode)) {
-			// 删除待验证用户信息
 			logger.debug("随机码比对失效");
-			userDao.removeWaitAuthUser(user);
 			return false;
 		}
 		Date addDate = user.getAddDate();
 		long addTime = addDate.getTime();
 		long nowTime = System.currentTimeMillis();
 		if (addTime + 12 * MilliSECCONDS_OF_HOURS < nowTime) {
-			// 删除待验证用户信息
 			logger.debug("验证超时:addTime" + addTime + ",nowTime:" + nowTime);
+			//删除过期的待验证用户
 			userDao.removeWaitAuthUser(user);
 			return false;
 		}
@@ -174,7 +172,7 @@ public class UserServiceImpl implements UserService {
 		StringBuilder protoData = getProtoResponseData(word);
 		protoData = regulateJson(protoData);
 		saveWordData(word, protoData);
-		StringBuilder response = buildResponse(user, protoData, word);
+		StringBuilder response = buildWordResponse(user, protoData, word);
 		return response.toString();
 	}
 
@@ -229,7 +227,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// 在金山词霸返回的数据上面添加额外的数据
-	private StringBuilder buildResponse(User user, StringBuilder response,
+	private StringBuilder buildWordResponse(User user, StringBuilder response,
 			String word) {
 		boolean existInWordBook = userDao.isExistedInWordBook(user, word);
 		logger.debug("user:" + user.getUid() + " have " + word + "? "
@@ -320,5 +318,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deletePersistentUserByPersistentId(String persistentId) {
 		userDao.deletePersistentUserByPersistentId(persistentId);
+	}
+
+	@Override
+	public void setSpeechType(User user, String speechType) {
+		user.setWordBookSpeechType(speechType);
+		userDao.saveUser(user);
 	}
 }

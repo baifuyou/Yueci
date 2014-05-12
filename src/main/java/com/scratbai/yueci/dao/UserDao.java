@@ -57,4 +57,6 @@ public interface UserDao {
 
 	void deletePersistentUserByUid(String uid);
 
+	void saveUser(User user);
+
 }

@@ -27,27 +27,33 @@ $(function() {
 		});
 	});
 
-	$("#comparisonButton").click(function(event) {
-		event.preventDefault();
-		var word = $("#searchWord").val();
-		$("title").html(word + "," + $("title").html());
-		var searchPath = "searchWord/" + word;
-		$.getJSON(searchPath, function(response) {
-			var html = renderEnglishSymbolsHtml(response, $.comparisonCounter++);
-			$("<br/>").appendTo("#searchEW");
-			$(html).appendTo("#searchEW");
-			setClickEvent(response.wordObject, $.comparisonCounter - 1);
-		});
-	});
-	
-	$("#searchWord").keydown(function (event) {
-		if (event.ctrlKey && event.keyCode == 13) { //ctrl + enter 
-			$("#comparisonButton").click();
+	$("#comparisonButton").click(
+			function(event) {
+				event.preventDefault();
+				var word = $("#searchWord").val();
+				$("title").html(word + "," + $("title").html());
+				var searchPath = "searchWord/" + word;
+				$.getJSON(searchPath,
+						function(response) {
+							var html = renderEnglishSymbolsHtml(response,
+									$.comparisonCounter++);
+							$("<br/>").appendTo("#searchEW");
+							$(html).appendTo("#searchEW");
+							setClickEvent(response.wordObject,
+									$.comparisonCounter - 1);
+						});
+			});
+
+	$("#searchWord").keydown(function(event) {
+		if ($("#comparisonButton").attr("disabled") != "disabled") {
+			if (event.ctrlKey && event.keyCode == 13) { // ctrl + enter
+				$("#comparisonButton").click();
+			}
 		}
 	});
 
 	searchRequestWord();
-	
+
 });
 
 /*
@@ -58,6 +64,7 @@ function searchRequestWord() {
 	console.log("searchRequestWord:" + word);
 	if (word == "" || word == null)
 		return
+
 	$("#searchWord").val(word);
 	$("#searchButton").click();
 }
@@ -101,7 +108,8 @@ function renderEnglishSymbolsHtml(response, comparIndex) {
 			"means" : means
 		};
 	});
-	var starType = existInWordBook == true ? "glyphicon-star" : "glyphicon-star-empty";
+	var starType = existInWordBook == true ? "glyphicon-star"
+			: "glyphicon-star-empty";
 	var starTitle = existInWordBook == true ? "从单词本移除" : "添加到单词本";
 	var symbolsHtml = template.render("wordInfoEW", {
 		"symbols" : symbolsData,
@@ -148,22 +156,20 @@ function setClickEvent(data, comparIndex) {
 					}
 				});
 		// 设置添加到单词本，和从单词本移除事件
-		$("#addToWordBook" + comparIndex + i).click(
-				{
-					"comparIndex" : comparIndex,
-					"index" : i
-				},
-				function(event) {
-					var comIndex = event.data.comparIndex;
-					var ind = event.data.index;
-					var title = $("#addToWordBook" + comIndex + ind).attr("title");
-					var word = $("#addToWordBook" + comIndex + ind).attr("word");
-					if (title == "添加到单词本") {
-						addToWordBook(word, comIndex, ind);
-					} else {
-						removeFromWordBook(word, comIndex, ind);
-					}
-				});
+		$("#addToWordBook" + comparIndex + i).click({
+			"comparIndex" : comparIndex,
+			"index" : i
+		}, function(event) {
+			var comIndex = event.data.comparIndex;
+			var ind = event.data.index;
+			var title = $("#addToWordBook" + comIndex + ind).attr("title");
+			var word = $("#addToWordBook" + comIndex + ind).attr("word");
+			if (title == "添加到单词本") {
+				addToWordBook(word, comIndex, ind);
+			} else {
+				removeFromWordBook(word, comIndex, ind);
+			}
+		});
 	}
 }
 
@@ -175,8 +181,8 @@ function removeFromWordBook(word, comIndex, ind) {
 				$("#addToWordBook" + comIndex + ind).attr("title", "添加到单词本");
 				$("#addToWordBook" + comIndex + ind + ">" + "span")
 						.removeClass("glyphicon-star");
-				$("#addToWordBook" + comIndex + ind + ">" + "span")
-						.addClass("glyphicon-star-empty");
+				$("#addToWordBook" + comIndex + ind + ">" + "span").addClass(
+						"glyphicon-star-empty");
 			} else if (data.state = "not login") {
 				remindLogin();
 			}
@@ -189,43 +195,37 @@ function addToWordBook(word, comIndex, ind) {
 	$.getJSON(path, function(data) {
 		if (data.state == "success") {
 			$("#addToWordBook" + comIndex + ind).attr("title", "从单词本移除");
-			$("#addToWordBook" + comIndex + ind + ">" + "span")
-					.removeClass("glyphicon-star-empty");
-			$("#addToWordBook" + comIndex + ind + ">" + "span")
-					.addClass("glyphicon-star");
-		}
-		else  if (data.state == "not login"){
+			$("#addToWordBook" + comIndex + ind + ">" + "span").removeClass(
+					"glyphicon-star-empty");
+			$("#addToWordBook" + comIndex + ind + ">" + "span").addClass(
+					"glyphicon-star");
+		} else if (data.state == "not login") {
 			remindLogin();
 		}
 	});
 }
 
-function remindLogin () {
-	var dialog = art.dialog({  
-		title: "您需要先登陆",
-	    content: '登陆?或者注册一个账号？',  
-	    lock : true,
-	    button: [  
-	        {  
-	            name: '登陆',  
-	            callback: function () {  
-	            	location.href = "login"; 
-	            },  
-	            focus: true  
-	        },  
-	        {  
-	            name: '注册',  
-	            callback: function () {  
-	            	location.href = "requestRegister";
-	            }  
-	        },  
-	        {  
-	            name: '取消'
-	        }  
-	    ]  
+function remindLogin() {
+	var dialog = art.dialog({
+		title : "您需要先登陆",
+		content : '登陆?或者注册一个账号？',
+		lock : true,
+		button : [ {
+			name : '登陆',
+			callback : function() {
+				location.href = "login";
+			},
+			focus : true
+		}, {
+			name : '注册',
+			callback : function() {
+				location.href = "requestRegister";
+			}
+		}, {
+			name : '取消'
+		} ]
 	});
 }
-
 
 function devolopMeans(comparIndex, index) {
 	$("#toggleButton" + comparIndex + index).html("∧");

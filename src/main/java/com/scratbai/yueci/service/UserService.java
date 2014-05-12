@@ -57,4 +57,6 @@ public interface UserService {
 
 	public void rememberMe(HttpServletResponse response, String uid,
 			int persistentLoginEffectiveSeconds);
+
+	void setSpeechType(User user, String speechType);
 }
