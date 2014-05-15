@@ -34,7 +34,7 @@
 			<p id = "nicknameNotInput" class = "hidden alert alert-danger">必须输入昵称</p>
 			<input id = "inputPassword" type="password" name="password"
 				class="form-control" placeholder="密 码">
-			<p id = "passwordNotInput" class = "hidden alert alert-danger">必须输入密码</p>
+			<p id = "passwordNotInput" class = "hidden alert alert-danger">密码长度应该在10到20位之间，并且不可以是纯数字</p>
 			<input id = "reinputPassword" type="password"
 				class="form-control" placeholder="确认密码">
 			<p id = "passwordNotMatch" class = "hidden alert alert-danger">两次密码不一致</p>

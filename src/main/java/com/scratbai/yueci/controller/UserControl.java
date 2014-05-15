@@ -9,6 +9,7 @@ import org.springframework.stereotype.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.scratbai.yueci.commons.CommonUtils;
 import com.scratbai.yueci.pojo.*;
 import com.scratbai.yueci.service.*;
 
@@ -24,15 +25,27 @@ public class UserControl {
 		User user = (User)session.getAttribute("user");
 		String speechType = user.getWordBookSpeechType().equals("am") ? "美式发音" : "英式发音";
 		model.addAttribute("user", user);
-		model.addAttribute("speechType", speechType);
 		return "userControl";
 	}
 	
-	@RequestMapping("user/setSpeechType/{speechType}")
+	@RequestMapping("user/saveProfileSetting")
 	@ResponseBody
-	public String setSpeechType(HttpSession session, @PathVariable String speechType) {
+	public String saveProfileSetting(HttpSession session, String speechType, String nickname) { //TODO 添加此路径到用户登陆拦截器中
 		User user = (User)session.getAttribute("user");
 		userService.setSpeechType(user, speechType);
+		userService.setNickname(user, nickname);
+		return JsonStatic.STATE_SUCCESS;
+	}
+	
+	@RequestMapping("user/changePassword")
+	@ResponseBody
+	public String changePassword(HttpSession session, String oldPassword, String newPassword) { //TODO 添加此路径到用户登陆拦截器中
+		User user = (User) session.getAttribute("user");
+		ValidateResult validateResult = userService.validate(user.getUid(), oldPassword);
+		if (validateResult != ValidateResult.SUCCESS) {
+			return JsonStatic.STATE_PASSWORD_ERROR;
+		}
+		userService.changePassword(user, newPassword);
 		return JsonStatic.STATE_SUCCESS;
 	}
 

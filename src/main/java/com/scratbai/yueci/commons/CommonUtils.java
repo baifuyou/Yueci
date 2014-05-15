@@ -117,4 +117,8 @@ public class CommonUtils {
 		return Pattern.matches(isChinese, word);
 	}
 
+	public static String generateSalt() {
+		return generateRandomCode(16);
+	}
+
 }

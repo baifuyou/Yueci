@@ -4,7 +4,7 @@ $(function() {
 
 function loadWordsList(pageIndex) {
 	var requestPath = "wordBook/list/" + pageIndex;
-	$.getJSON(requestPath, function(data) { // TODO 添加页码支持
+	$.getJSON(requestPath, function(data) { 
 		var words = data.words.map(function(word) {
 			var ph = data.speechType == "en" ? word.symbols[0].ph_en
 					: word.symbols[0].ph_am;

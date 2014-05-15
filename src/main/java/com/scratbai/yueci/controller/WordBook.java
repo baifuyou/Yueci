@@ -19,7 +19,7 @@ import com.scratbai.yueci.service.UserService;
 @Controller
 public class WordBook {
 	
-	private final static int WORD_COUNT_PER_PAGE = 20;
+	private final static int WORD_COUNT_PER_PAGE = 10;
 	
 	@Autowired
 	private UserService userService;

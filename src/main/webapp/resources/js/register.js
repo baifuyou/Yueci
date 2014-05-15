@@ -1,12 +1,12 @@
 $(function() {
-	$("#inputEmail").focusout(function (event) {
-		if (validateEmail() ) {
+	$("#inputEmail").focusout(function(event) {
+		if (validateEmail()) {
 			$("#emailInvalid").removeClass("show").addClass("hidden");
 			enableElement($("#submit"));
-			//验证email是否已被注册
-			$.get("validateEmailUsable", 
-					{ uid: $("#inputEmail").val()}, 
-					function(data) {
+			// 验证email是否已被注册
+			$.get("validateEmailUsable", {
+				uid : $("#inputEmail").val()
+			}, function(data) {
 				if (data == "unusable") {
 					showElement($("#emailUnusable"));
 					disableElement($("#submit"));
@@ -20,8 +20,8 @@ $(function() {
 			disableElement($("#submit"));
 		}
 	});
-	
-	$("#reinputPassword").focusout(function (event) {
+
+	$("#reinputPassword").focusout(function(event) {
 		if (validateTwicePassword()) {
 			hiddenElement($("#passwordNotMatch"));
 			enableElement($("#submit"));
@@ -29,10 +29,10 @@ $(function() {
 			showElement($("#passwordNotMatch"));
 			disableElement($("#submit"));
 		}
-		
+
 	});
-	
-	$("#inputPassword").focusout(function (event) {
+
+	$("#inputPassword").focusout(function(event) {
 		if (checkPassword()) {
 			hiddenElement($("#passwordNotInput"));
 			enableElement($("#submit"));
@@ -41,9 +41,9 @@ $(function() {
 			disableElement($("#submit"));
 		}
 	});
-	
-	$("#inputNickname").focusout(function (event) {
-		if (checkNickname() ) {
+
+	$("#inputNickname").focusout(function(event) {
+		if (checkNickname()) {
 			hiddenElement($("#nicknameNotInput"));
 			enableElement($("#submit"));
 		} else {
@@ -51,14 +51,16 @@ $(function() {
 			disableElement($("#submit"));
 		}
 	});
-	
-	$("#submit").click(function (event) {
-		if (validateTwicePassword() && validateEmail() && checkNickname() && checkPassword()) {
-			enableElement($("#submit"));
-		} else {
-			disableElement($("#submit"));
-		}
-	});
+
+	$("#submit").click(
+			function(event) {
+				if (validateTwicePassword() && validateEmail()
+						&& checkNickname() && checkPassword()) {
+					enableElement($("#submit"));
+				} else {
+					disableElement($("#submit"));
+				}
+			});
 });
 
 function enableElement(element) {
@@ -79,12 +81,15 @@ function showElement(element) {
 
 function checkPassword() {
 	var pwd = $("#inputPassword").val();
-	return pwd != undefined && pwd != null && pwd != "" ;
+	var reg = /^[0-9]+$/;
+	return pwd != undefined && pwd != null && pwd != ""
+			&& (pwd.length >= 10) && (pwd.length <= 20)
+			&& (!reg.test(pwd));
 }
 
 function checkNickname() {
 	var nickname = $("#inputNickname").val();
-	return nickname != undefined && nickname != null && nickname != "" ;
+	return nickname != undefined && nickname != null && nickname != "";
 }
 
 function validateTwicePassword() {
@@ -98,4 +103,3 @@ function validateEmail() {
 	var reg = /^[a-zA-Z0-9_\.-]+@[a-zA-Z0-9_\.-]+\.[a-zA-Z]+$/;
 	return reg.test(email);
 }
-

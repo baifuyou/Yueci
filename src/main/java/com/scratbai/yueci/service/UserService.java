@@ -59,4 +59,8 @@ public interface UserService {
 			int persistentLoginEffectiveSeconds);
 
 	void setSpeechType(User user, String speechType);
+
+	public void setNickname(User user, String nickname);
+
+	public void changePassword(User user, String newPassword);
 }

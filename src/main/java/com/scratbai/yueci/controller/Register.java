@@ -32,7 +32,7 @@ public class Register {
 			return "register/registerFailure";
 		}
 		String emailAuthCode = uid.replaceAll("[@.]", "");
-		String salt = CommonUtils.generateRandomCode(16);
+		String salt = CommonUtils.generateSalt();
 		String randomCode = CommonUtils.generateRandomCode();
 		String encryptedPwd = CommonUtils.encrypt(salt + password);
 		

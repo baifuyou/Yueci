@@ -325,4 +325,19 @@ public class UserServiceImpl implements UserService {
 		user.setWordBookSpeechType(speechType);
 		userDao.saveUser(user);
 	}
+
+	@Override
+	public void setNickname(User user, String nickname) {
+		user.setNickname(nickname);
+		userDao.saveUser(user);
+	}
+
+	@Override
+	public void changePassword(User user, String newPassword) {
+		String salt = CommonUtils.generateSalt();
+		String encryptedPassword = CommonUtils.encrypt(salt + newPassword);
+		user.setSalt(salt);
+		user.setEncryptedPwd(encryptedPassword);
+		userDao.saveUser(user);
+	}
 }
