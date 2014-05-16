@@ -66,10 +66,10 @@ public class Home {
 	public String addWordToWordBook(HttpSession session,
 			@PathVariable String word) {
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		/*if (user == null) {
 			logger.debug("not login user:" + " add " + word);
 			return JsonStatic.STATE_NOT_LOGIN;
-		}
+		}*/
 		userService.addWordToWordBook(user, word);
 		return JsonStatic.STATE_SUCCESS;
 	}
@@ -79,10 +79,10 @@ public class Home {
 	public String removeWordFromWordBook(HttpSession session,
 			@PathVariable String word) {
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		/*if (user == null) {
 			logger.debug("not login user:" + " remove " + word);
 			return JsonStatic.STATE_NOT_LOGIN;
-		}
+		}*/
 		logger.debug("user:" + user.getUid() + " remove " + word);
 		userService.removeWordFromWordBook(user, word);
 		return JsonStatic.STATE_SUCCESS;

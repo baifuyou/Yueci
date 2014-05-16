@@ -1,11 +1,17 @@
 package com.scratbai.yueci.controller;
 
+import java.io.OutputStream;
+
 import javax.servlet.http.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-public class NotLoginFilter implements HandlerInterceptor {
+public class NotLoginInterceptor implements HandlerInterceptor {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void afterCompletion(HttpServletRequest request,
@@ -27,7 +33,13 @@ public class NotLoginFilter implements HandlerInterceptor {
 		if (checkUserLogin(session)) {
 			return true;
 		} else {
-			response.sendRedirect("../login");
+			String accept = request.getHeader("Accept");
+			if (accept.contains("json"))  {
+				OutputStream out = response.getOutputStream();
+				out.write(JsonStatic.STATE_NOT_LOGIN.getBytes());
+			} else {
+				response.sendRedirect("../login");
+			}
 			return false;
 		}
 	}

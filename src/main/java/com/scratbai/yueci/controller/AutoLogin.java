@@ -40,7 +40,6 @@ public class AutoLogin implements HandlerInterceptor {
 		String uid = (String) session.getAttribute("uid");
 		if (isLogin) {
 			//在session持久化的过程中user不会被持久化；下面重新获取user并写入session
-			logger.debug(uid + " is login in");
 			if (user == null) {
 				user = userService.getUser(uid);
 				session.setAttribute("user", user);

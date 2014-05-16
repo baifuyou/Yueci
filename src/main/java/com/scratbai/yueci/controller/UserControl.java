@@ -30,7 +30,7 @@ public class UserControl {
 	
 	@RequestMapping("user/saveProfileSetting")
 	@ResponseBody
-	public String saveProfileSetting(HttpSession session, String speechType, String nickname) { //TODO 添加此路径到用户登陆拦截器中
+	public String saveProfileSetting(HttpSession session, String speechType, String nickname) { 
 		User user = (User)session.getAttribute("user");
 		userService.setSpeechType(user, speechType);
 		userService.setNickname(user, nickname);
@@ -39,7 +39,7 @@ public class UserControl {
 	
 	@RequestMapping("user/changePassword")
 	@ResponseBody
-	public String changePassword(HttpSession session, String oldPassword, String newPassword) { //TODO 添加此路径到用户登陆拦截器中
+	public String changePassword(HttpSession session, String oldPassword, String newPassword) {
 		User user = (User) session.getAttribute("user");
 		ValidateResult validateResult = userService.validate(user.getUid(), oldPassword);
 		if (validateResult != ValidateResult.SUCCESS) {
