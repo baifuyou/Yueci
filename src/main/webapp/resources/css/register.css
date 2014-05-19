@@ -46,3 +46,11 @@ body {
 .form-signin input[type="submit"] {
 	margin-top: 10px;
 }
+
+.info-success {
+	color: green;
+}
+
+.info-error {
+	color: red;
+}

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.*;
 
+//选择了自动登陆的用户
 @Entity
 public class PersistentUser {
 	@Id

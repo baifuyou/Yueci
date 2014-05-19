@@ -26,18 +26,18 @@
 		<form class="form-signin" role="form" action="register" method="post">
 			<h2 class="form-signin-heading">现在注册，成为阅辞会员</h2>
 			<div><input id= "inputEmail" type="text" name="uid" class="form-control" placeholder="邮 箱">
-				<p id = "emailInvalid" class = "hidden alert alert-danger">请输入合法的邮件地址</p>
-				<p id = "emailUnusable" class = "hidden alert alert-danger">邮箱已被注册</p>
+				<span id = "emailInvalid" class = "hidden info-error">请输入合法的邮件地址</span>
+				<span id = "emailUnusable" class = "hidden info-error">邮箱已被注册</span>
 			</div>
 			<input " id = "inputNickname" type="text" name="nickname" class="form-control"
 				placeholder="昵 称"> 
-			<p id = "nicknameNotInput" class = "hidden alert alert-danger">必须输入昵称</p>
+			<span id = "nicknameNotInput" class = "hidden info-error">必须输入昵称</span>
 			<input id = "inputPassword" type="password" name="password"
 				class="form-control" placeholder="密 码">
-			<p id = "passwordNotInput" class = "hidden alert alert-danger">密码长度应该在10到20位之间，并且不可以是纯数字</p>
+			<span id = "passwordNotInput" class = "hidden info-error">密码长度应该在10到20位之间，并且不可以是纯数字</span>
 			<input id = "reinputPassword" type="password"
 				class="form-control" placeholder="确认密码">
-			<p id = "passwordNotMatch" class = "hidden alert alert-danger">两次密码不一致</p>
+			<span id = "passwordNotMatch" class = "hidden info-error">两次密码不一致</span>
 			<div>
 				<input id = "submit" class="btn btn-lg btn-primary btn-block" type="submit" value = "注册">
 			</div>

@@ -20,7 +20,6 @@
 <script type="text/javascript" src="resources/js/home.js"></script>
 <script type="text/javascript" src="resources/js/lib/arttemplate.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
-<script type="text/javascript" src="resources/js/lib/artDialog.js?skin=default"></script>
 <title>Home-阅辞</title>
 </head>
 <body>

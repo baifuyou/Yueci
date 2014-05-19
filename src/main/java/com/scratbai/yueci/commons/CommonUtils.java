@@ -14,16 +14,12 @@ import org.slf4j.LoggerFactory;
 
 public class CommonUtils {
 
-	private static final char[] SYMBOLS = "qwertyuiopasdfghjklzxcvbnm1234567890._"
+	private static final char[] SYMBOLS = "qwertyuiopasdfghjklzxcvbnm1234567890"
 			.toCharArray();
 	private static final int SYMBOLS_LENGTH = SYMBOLS.length;
 	private static final Logger logger = LoggerFactory
 			.getLogger(CommonUtils.class);
 	private static final Map<String, String> keyValueCache = new HashMap<String, String>();
-
-	public static String generateEmailAuthCode(String uid) {
-		return encrypt(uid);
-	}
 
 	/*
 	 * 生成六位随机码

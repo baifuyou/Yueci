@@ -44,7 +44,7 @@ public class SaveEnglishWordTask implements Runnable {
 				return;
 			}
 			saveMp3ToCDN(eWord);
-			userDao.addEnglishWord(eWord);
+			userDao.saveObject(eWord);
 		} catch (JsonParseException e) {
 			logger.error("json to EnglishWord parse error,Exception Message:\n" + e.getMessage());
 			e.printStackTrace();

@@ -44,7 +44,7 @@ public class SaveChineseWordTask implements Runnable {
 				return;
 			}
 			saveMp3ToCDN(cWord);
-			userDao.addChineseWord(cWord);
+			userDao.saveObject(cWord);
 		} catch (JsonParseException e) {
 			logger.error("json to ChineseWord parse error,Exception Message:\n"
 					+ e.getMessage());

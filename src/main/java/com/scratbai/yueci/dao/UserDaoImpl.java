@@ -32,16 +32,11 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void addWaitAuthUser(WaitAuthUser user) {
-		datastore.save(user);
-	}
-
-	@Override
-	public String getRandomCodeByEmailAuthCode(String emailAuthCode) {
+	public String getauthCodeByemailRecoginitionCode(String emailRecognitionCode) {
 		DBCollection collection = db.getCollection("waitAuthUsers");
-		DBObject object = collection.findOne(new BasicDBObject("emailAuthCode",
-				emailAuthCode), new BasicDBObject("randomCode", "1"));
-		return object == null ? null : (String) object.get("randomCode");
+		DBObject object = collection.findOne(new BasicDBObject("emailRecognitionCode",
+				emailRecognitionCode), new BasicDBObject("authCode", "1"));
+		return object == null ? null : (String) object.get("authCode");
 	}
 
 	@Override
@@ -53,15 +48,10 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public WaitAuthUser getWaitAuthUser(String emailAuthCode) {
+	public WaitAuthUser getWaitAuthUser(String emailRecognitionCode) {
 		WaitAuthUser user = datastore.find(WaitAuthUser.class,
-				"emailAuthCode =", emailAuthCode).get();
+				"emailRecognitionCode =", emailRecognitionCode).get();
 		return user;
-	}
-
-	@Override
-	public void addUser(User user) {
-		datastore.save(user);
 	}
 
 	public Datastore getDatastore() {
@@ -78,12 +68,6 @@ public class UserDaoImpl implements UserDao {
 
 	public void setDb(DB db) {
 		this.db = db;
-	}
-
-	@Override
-	public void removeWaitAuthUser(WaitAuthUser user) {
-		datastore.delete(datastore.find(WaitAuthUser.class, "uid =",
-				user.getUid()));
 	}
 
 	@Override
@@ -112,16 +96,6 @@ public class UserDaoImpl implements UserDao {
 		Query<WordReference> query = datastore.createQuery(WordReference.class)
 				.filter("word =", word).filter("uid =", user.getUid());
 		datastore.delete(query);
-	}
-
-	@Override
-	public void addEnglishWord(EnglishWord eWord) {
-		datastore.save(eWord);
-	}
-
-	@Override
-	public void addChineseWord(ChineseWord cWord) {
-		datastore.save(cWord);
 	}
 
 	@Override
@@ -178,11 +152,6 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void addPersistentLoginUser(PersistentUser persistentUser) {
-		datastore.save(persistentUser);
-	}
-
-	@Override
 	public PersistentUser getPersistentUserByPersistentId(String persistentId) {
 		PersistentUser persistentUser =  datastore.find(PersistentUser.class, "persistentId =", persistentId).get();
 		return persistentUser;
@@ -196,8 +165,27 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void saveUser(User user) {
-		datastore.save(user);
+	public <T> void saveObject(T object) {
+		datastore.save(object);
+	}
+
+	@Override
+	public ResetPasswordUser getResetPasswordUserByEmailRecognitionCode(
+			String emailRecognitionCode) {
+		logger.debug("emailRecognitionCode" + emailRecognitionCode);
+		return datastore.find(ResetPasswordUser.class, "emailRecognitionCode =", emailRecognitionCode).get();
+	}
+
+	@Override
+	public void removeWaitAuthUserByUid(String uid) {
+		datastore.delete(datastore.find(WaitAuthUser.class, "uid =",
+				uid));
+	}
+
+	@Override
+	public void removeResetPasswordUser(String uid) {
+		Query<ResetPasswordUser> query = datastore.createQuery(ResetPasswordUser.class).filter("uid =", uid);
+		datastore.delete(query);
 	}
 
 }

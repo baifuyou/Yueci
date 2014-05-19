@@ -21,20 +21,46 @@
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script
 	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="resources/js/login.js"></script>
 <title>登陆-阅辞</title>
 </head>
 <body>
 	<div class="container">
 
-		<form id = "form" class="form-signin" role="form" action="validate" method="post">
+		<div id = "resetPassword" class="modal fade" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title">重置密码</h4>
+					</div>
+					<div class="modal-body">
+						<form id = "email-form" >
+							<span>您的注册邮箱：</span>
+							<input class="form-control" id = "email" type = "text" name = "email">
+							<span id = "info" class = "hidden"></span>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button id = "request-reset-password" type="button" class="btn btn-primary">发送邮件以重置密码</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+
+		<form class="form-signin" role="form" action="validate"
+			method="post">
 			<h2 class="form-signin-heading">登陆以后使用更多功能</h2>
-			<input name = "uid" class="form-control"
-				placeholder="邮 箱" required
-				autofocus/>
-			<input name= "password" type="password" class="form-control"
-				placeholder="密 码" required/>
-			<label class="checkbox">
-			<input type = "checkbox" name = "rememberMe" value = "1" />30天以内自动登陆
+			<input name="uid" class="form-control" placeholder="邮 箱" required
+				autofocus /> <input name="password" type="password"
+				class="form-control" placeholder="密 码" required /> <label
+				class="checkbox"> <input type="checkbox" name="rememberMe"
+				value="1" />30天以内自动登陆
 			</label>
 			<div>${errorInfo }</div>
 			<div>
@@ -42,10 +68,10 @@
 					陆</button>
 			</div>
 			<div>
-				<label>忘记密码？<a href="findPassword">点击这里</a></label>
+				<span>忘记密码？<a data-toggle="modal" data-target="#resetPassword">点击这里</a></span>
 			</div>
 			<div>
-				<label>还没有账号？<a href="requestRegister">快速注册</a></label>
+				<span>还没有账号？<a href="requestRegister">快速注册</a></span>
 			</div>
 		</form>
 

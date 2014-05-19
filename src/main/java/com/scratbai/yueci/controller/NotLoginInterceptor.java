@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.scratbai.yueci.commons.CommonUtils;
+
 public class NotLoginInterceptor implements HandlerInterceptor {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -38,7 +40,8 @@ public class NotLoginInterceptor implements HandlerInterceptor {
 				OutputStream out = response.getOutputStream();
 				out.write(JsonStatic.STATE_NOT_LOGIN.getBytes());
 			} else {
-				response.sendRedirect("../login");
+				String domain = CommonUtils.getConfigValue("webAppConfig.properties", "domain");
+				response.sendRedirect(domain + "login");
 			}
 			return false;
 		}

@@ -71,20 +71,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	/*
+	 * (non-Javadoc)
+	 * @see com.scratbai.yueci.service.UserService#addWaitAuthUser(com.scratbai.yueci.pojo.WaitAuthUser)
+	 * 添加WaitAuthUser到数据库，如果已经存在相同uid的WaitAuthUser，则先删除之前的WaitAuthUser
+	 */
 	public void addWaitAuthUser(WaitAuthUser user) {
-		userDao.addWaitAuthUser(user);
+		userDao.removeWaitAuthUserByUid(user.getUid());
+		userDao.saveObject(user);
 	}
 
 	/*
-	 * 做邮箱验证，输入参数里面包括一个邮箱表示码和一个随机码，两者必须与数据库中存储的数据相匹配
-	 * 才能验证成功
+	 * 做邮箱验证，输入参数里面包括一个邮箱表示码和一个随机码，两者必须与数据库中存储的数据相匹配 才能验证成功
 	 */
 	@Override
-	public boolean authEmail(String emailAuthCode, String randomCode,
+	public boolean authEmail(String emailRecognitionCode, String randomCode,
 			int timeLimitHours) {
-		WaitAuthUser user = userDao.getWaitAuthUser(emailAuthCode);
-		String rightRandomCode = user.getRandomCode();
-		if (rightRandomCode == null || !rightRandomCode.equals(randomCode)) {
+		WaitAuthUser user = userDao.getWaitAuthUser(emailRecognitionCode);
+		if (user == null) {
+			return false;
+		}
+		String rightAuthCode = user.getAuthCode();
+		if (rightAuthCode == null || !rightAuthCode.equals(randomCode)) {
 			logger.debug("随机码比对失效");
 			return false;
 		}
@@ -93,8 +101,8 @@ public class UserServiceImpl implements UserService {
 		long nowTime = System.currentTimeMillis();
 		if (addTime + 12 * MilliSECCONDS_OF_HOURS < nowTime) {
 			logger.debug("验证超时:addTime" + addTime + ",nowTime:" + nowTime);
-			//删除过期的待验证用户
-			userDao.removeWaitAuthUser(user);
+			// 删除过期的待验证用户
+			userDao.removeWaitAuthUserByUid(user.getUid());;
 			return false;
 		}
 		return true;
@@ -109,8 +117,8 @@ public class UserServiceImpl implements UserService {
 				userDefaultConfig, "userDefaultSpeechType");
 		logger.debug(wordBookSpeechType);
 		user.setWordBookSpeechType(wordBookSpeechType);
-		userDao.addUser(user);
-		userDao.removeWaitAuthUser(waitAuthUser);
+		userDao.saveObject(user);
+		userDao.removeWaitAuthUserByUid(waitAuthUser.getUid());;
 	}
 
 	private User generateUser(WaitAuthUser waitAuthUser) {
@@ -287,24 +295,27 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void rememberMe(HttpServletResponse response, String uid, int persistentLoginEffectiveSeconds) {
+	public void rememberMe(HttpServletResponse response, String uid,
+			int persistentLoginEffectiveSeconds) {
 		userDao.deletePersistentUserByUid(uid);
 		PersistentUser persistentUser = new PersistentUser();
 		long nowTimeStamp = System.currentTimeMillis();
 		Date addTime = new Date(nowTimeStamp);
-		long endTimeStamp = nowTimeStamp + ((long)persistentLoginEffectiveSeconds) * 1000;
+		long endTimeStamp = nowTimeStamp
+				+ ((long) persistentLoginEffectiveSeconds) * 1000;
 		Date endTime = new Date(endTimeStamp);
-		logger.debug(((Long)nowTimeStamp).toString());
-		logger.debug("persistentLoginEffectiveSeconds:" + persistentLoginEffectiveSeconds);
-		logger.debug(((Long)endTimeStamp).toString());
+		logger.debug(((Long) nowTimeStamp).toString());
+		logger.debug("persistentLoginEffectiveSeconds:"
+				+ persistentLoginEffectiveSeconds);
+		logger.debug(((Long) endTimeStamp).toString());
 		persistentUser.setAddTime(addTime);
 		persistentUser.setEndTime(endTime);
 		persistentUser.setUid(uid);
 		String salt = CommonUtils.generateRandomCode(16);
 		String persistentId = uid + "" + CommonUtils.encrypt(uid + salt);
 		persistentUser.setPersistentId(persistentId);
-		userDao.addPersistentLoginUser(persistentUser);
-		
+		userDao.saveObject(persistentUser);
+
 		Cookie cookie = new Cookie("persistentId", persistentId);
 		cookie.setMaxAge(persistentLoginEffectiveSeconds);
 		response.addCookie(cookie);
@@ -323,13 +334,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void setSpeechType(User user, String speechType) {
 		user.setWordBookSpeechType(speechType);
-		userDao.saveUser(user);
+		userDao.saveObject(user);
 	}
 
 	@Override
 	public void setNickname(User user, String nickname) {
 		user.setNickname(nickname);
-		userDao.saveUser(user);
+		userDao.saveObject(user);
 	}
 
 	@Override
@@ -338,6 +349,53 @@ public class UserServiceImpl implements UserService {
 		String encryptedPassword = CommonUtils.encrypt(salt + newPassword);
 		user.setSalt(salt);
 		user.setEncryptedPwd(encryptedPassword);
-		userDao.saveUser(user);
+		userDao.saveObject(user);
+	}
+
+	private void sendResetPasswordEmail(String emailRecognitionCode,
+			String authCode, String emailAddress, String authPath) {
+		String topic = "阅辞-重置密码";
+		String finalPath = authPath + "/" + emailRecognitionCode + "/" + authCode;
+		String content = "尊敬的用户，您好！您收到本邮件是因为您在阅辞申请了重置密码"
+				+ "请点击以下链接重置您的密码，您也可以复制该链接在浏览器中打开<br>" + "<a href=\""
+				+ finalPath + "\"/>" + finalPath + "</a>";
+		CommonUtils.sendEmail(topic, content, emailAddress);
+	}
+
+	@Override
+	public void requestResetPassword(String email) {
+		String authCode = CommonUtils.generateRandomCode(6);
+		String emailRecognitionCode = email.replaceAll("[@.]", "");
+		String resetPath = CommonUtils.getConfigValue(
+				"webAppConfig.properties", "domain") + "authBeforeResetPassword";
+		sendResetPasswordEmail(emailRecognitionCode, authCode, email, resetPath);
+
+		ResetPasswordUser resetPasswordUser = new ResetPasswordUser();
+		resetPasswordUser.setAuthCode(authCode);
+		resetPasswordUser.setEmailRecognitionCode(emailRecognitionCode);
+		resetPasswordUser.setUid(email);
+		resetPasswordUser.setDeadline(new Date(System.currentTimeMillis() + 12 * 3600 * 1000));
+		userDao.removeResetPasswordUser(email);  //删除之前的重置密码信息，如果有的话
+		userDao.saveObject(resetPasswordUser);
+	}
+
+	@Override
+	public ResetPasswordUser getResetPasswordUserByEmailRecognitionCode(
+			String emailRecognitionCode) {
+		return userDao
+				.getResetPasswordUserByEmailRecognitionCode(emailRecognitionCode);
+	}
+
+	@Override
+	public void enableResetPassword(ResetPasswordUser resetPasswordUser) {
+		resetPasswordUser.setResetEnable(true);
+		resetPasswordUser.setAuthCode(CommonUtils.generateRandomCode(6));
+		resetPasswordUser.setDeadline(new Date(System.currentTimeMillis() + 1800000));
+		userDao.saveObject(resetPasswordUser);
+	}
+
+	@Override
+	public void removeResetPasswordUserByUid(String uid) {
+		userDao.removeResetPasswordUser(uid);
 	}
 }

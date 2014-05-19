@@ -205,7 +205,7 @@ function addToWordBook(word, comIndex, ind) {
 	});
 }
 
-function remindLogin() {
+function remindLogin() { //TODO 更改实现，，，，！！！！，，，，，非常重要
 	var dialog = art.dialog({
 		title : "您需要先登陆",
 		content : '登陆?或者注册一个账号？',

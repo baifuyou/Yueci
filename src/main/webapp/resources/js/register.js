@@ -4,10 +4,10 @@ $(function() {
 			$("#emailInvalid").removeClass("show").addClass("hidden");
 			enableElement($("#submit"));
 			// 验证email是否已被注册
-			$.get("validateEmailUsable", {
-				uid : $("#inputEmail").val()
+			$.getJSON("checkEmailIsExisted", {
+				"email" : $("#inputEmail").val()
 			}, function(data) {
-				if (data == "unusable") {
+				if (data.state == "existed") {
 					showElement($("#emailUnusable"));
 					disableElement($("#submit"));
 				} else {

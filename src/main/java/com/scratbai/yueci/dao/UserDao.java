@@ -5,6 +5,7 @@ import java.util.List;
 import com.scratbai.yueci.pojo.ChineseWord;
 import com.scratbai.yueci.pojo.EnglishWord;
 import com.scratbai.yueci.pojo.PersistentUser;
+import com.scratbai.yueci.pojo.ResetPasswordUser;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.WaitAuthUser;
 
@@ -14,17 +15,11 @@ public interface UserDao {
 
 	boolean isUidExist(String uid);
 
-	void addWaitAuthUser(WaitAuthUser user);
-
-	String getRandomCodeByEmailAuthCode(String emailAuthCode);
+	String getauthCodeByemailRecoginitionCode(String emailRecoginitionCode);
 
 	boolean isWaitAuthUid(String uid);
 
 	WaitAuthUser getWaitAuthUser(String emailCode);
-
-	void addUser(User user);
-
-	void removeWaitAuthUser(WaitAuthUser user);
 
 	User getUser(String uid);
 
@@ -33,11 +28,7 @@ public interface UserDao {
 	void addWordToWordBook(User user, String word);
 
 	void removeWordFromWordBook(User user, String word);
-
-	void addEnglishWord(EnglishWord eWord);
-
-	void addChineseWord(ChineseWord cWord);
-
+	
 	boolean isExistedInWordBook(User user, String word);
 
 	boolean isExistedInEnglishWord(String wordName);
@@ -49,14 +40,19 @@ public interface UserDao {
 
 	long getWordsCountInWordBook(String uid);
 
-	void addPersistentLoginUser(PersistentUser persistentUser);
-
 	PersistentUser getPersistentUserByPersistentId(String persistentId);
 
 	void deletePersistentUserByPersistentId(String persistentId);
 
 	void deletePersistentUserByUid(String uid);
 
-	void saveUser(User user);
+	<T> void saveObject(T object);
+
+	ResetPasswordUser getResetPasswordUserByEmailRecognitionCode(
+			String emailRecognitionCode);
+
+	void removeWaitAuthUserByUid(String uid);
+
+	void removeResetPasswordUser(String uid);
 
 }

@@ -13,8 +13,8 @@ public class WaitAuthUser {
 	private String salt;
 	private String encryptedPwd;
 	private String nickname;
-	private String emailAuthCode;
-	private String randomCode;
+	private String emailRecognitionCode;
+	private String authCode;
 	private Date addDate;
 	
 	public WaitAuthUser( ) {
@@ -22,12 +22,12 @@ public class WaitAuthUser {
 	}
 	
 	public WaitAuthUser(String uid, String encryptedPwd, String nickname,
-			String emailAuthCode, String randomCode, Date addDate) {
+			String emailRecognitionCode, String authCode, Date addDate) {
 		this.uid = uid;
 		this.encryptedPwd = encryptedPwd;
 		this.nickname = nickname;
-		this.emailAuthCode = emailAuthCode;
-		this.randomCode = randomCode;
+		this.emailRecognitionCode = emailRecognitionCode;
+		this.authCode = authCode;
 		this.addDate = addDate;
 	}
 
@@ -55,22 +55,6 @@ public class WaitAuthUser {
 		this.nickname = nickname;
 	}
 
-	public String getEmailAuthCode() {
-		return emailAuthCode;
-	}
-
-	public void setEmailAuthCode(String emailAuthCode) {
-		this.emailAuthCode = emailAuthCode;
-	}
-
-	public String getRandomCode() {
-		return randomCode;
-	}
-
-	public void setRandomCode(String randomCode) {
-		this.randomCode = randomCode;
-	}
-
 	public Date getAddDate() {
 		return addDate;
 	}
@@ -93,6 +77,22 @@ public class WaitAuthUser {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public String getEmailRecognitionCode() {
+		return emailRecognitionCode;
+	}
+
+	public void setEmailRecognitionCode(String emailRecognitionCode) {
+		this.emailRecognitionCode = emailRecognitionCode;
+	}
+
+	public String getAuthCode() {
+		return authCode;
+	}
+
+	public void setAuthCode(String authCode) {
+		this.authCode = authCode;
 	}
 
 }

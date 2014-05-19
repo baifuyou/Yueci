@@ -42,7 +42,7 @@
 							placeholder="昵 称" value = "${user.nickname }">
 					</div>
 					<div class="col-sm-2">
-						<span id = "please-input-nickname"  class = "info-failure hidden">请输入昵称</span>
+						<span id = "please-input-nickname"  class = "info-error hidden">请输入昵称</span>
 					</div>
 				</div>
 				<div class="form-group setting-item">
@@ -65,7 +65,7 @@
 						<button type="submit" id="save-profile" class="btn btn-primary">保
 							存</button>
 						<span class = "info-success hidden" id = "save-profile-success">保存成功</span>
-						<span class = "info-failure hidden" id = "save-profile-failure">保存失败</span>
+						<span class = "info-error hidden" id = "save-profile-failure">保存失败</span>
 				</div>
 			</form>
 		</div>
@@ -77,7 +77,7 @@
 					<div class="col-sm-10">
 						<input class="form-control" type="password" id="old-password"
 							placeholder="旧密码">
-						<span id = "password-error" class = "info-failure hidden">密码错误</span>
+						<span id = "password-error" class = "info-error hidden">密码错误</span>
 					</div>
 				</div>
 				<div class="form-group setting-item">
@@ -86,7 +86,7 @@
 					<div class="col-sm-10">
 						<input class="form-control" type="password" id="new-password"
 							placeholder="新密码">
-						<span id = "password-format-error" class = "info-failure hidden">密码长度应该在10到20位之间，并且不可以是纯数字</span>
+						<span id = "password-format-error" class = "info-error hidden">密码长度应该在10到20位之间，并且不可以是纯数字</span>
 					</div>
 				</div>
 				<div class="form-group setting-item">
@@ -95,7 +95,7 @@
 					<div class="col-sm-10">
 						<input class="form-control" type="password" id="new-password2"
 							placeholder="重复新密码">
-						<span id = "two-password-not-identical" class = "info-failure hidden">两次密码不一致</span>
+						<span id = "two-password-not-identical" class = "info-error hidden">两次密码不一致</span>
 					</div>
 				</div>
 
@@ -103,7 +103,7 @@
 					<button type="submit" id="save-password" class="btn btn-primary">保
 						存</button>
 					<span class = "info-success hidden" id = "save-password-success">保存成功</span>
-					<span class = "info-failure hidden" id = "save-password-failure">保存失败</span>
+					<span class = "info-error hidden" id = "save-password-failure">保存失败</span>
 				</div>
 			</form>
 		</div>

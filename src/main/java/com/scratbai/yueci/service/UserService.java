@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.scratbai.yueci.pojo.EnglishWord;
 import com.scratbai.yueci.pojo.PersistentUser;
+import com.scratbai.yueci.pojo.ResetPasswordUser;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.ValidateResult;
 import com.scratbai.yueci.pojo.WaitAuthUser;
@@ -22,8 +23,8 @@ public interface UserService {
 
 	public boolean isUidExist(String uid);
 
-	public void sendAuthEmail(String uid, String emailAuthCode,
-			String randomCode, String emailAddress, String authPath);
+	public void sendAuthEmail(String uid, String emailRecognitionCode,
+			String authCode, String emailAddress, String authPath);
 
 	public boolean authEmail(String emailAuthCode, String randomCode,
 			int timeLimit);
@@ -63,4 +64,13 @@ public interface UserService {
 	public void setNickname(User user, String nickname);
 
 	public void changePassword(User user, String newPassword);
+
+	public void requestResetPassword(String email);
+
+	public ResetPasswordUser getResetPasswordUserByEmailRecognitionCode(
+			String emailRecognitionCode);
+
+	public void enableResetPassword(ResetPasswordUser resetPasswordUser);
+
+	public void removeResetPasswordUserByUid(String uid);
 }

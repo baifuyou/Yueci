@@ -27,13 +27,13 @@ public class Register {
 
 	@RequestMapping("/register")
 	public String register(@RequestParam String uid,
-			@RequestParam String password, String nickname) {
+			@RequestParam String password, String nickname) { //TODO 重构，把主要逻辑移到service层实现
 		if (userService.isUidExist(uid) || userService.isWaitAuthUidExist(uid)) {
 			return "register/registerFailure";
 		}
-		String emailAuthCode = uid.replaceAll("[@.]", "");
+		String emailRecognitionCode = uid.replaceAll("[@.]", "");
 		String salt = CommonUtils.generateSalt();
-		String randomCode = CommonUtils.generateRandomCode();
+		String authCode = CommonUtils.generateRandomCode();
 		String encryptedPwd = CommonUtils.encrypt(salt + password);
 		
 		WaitAuthUser user = new WaitAuthUser();
@@ -41,22 +41,22 @@ public class Register {
 		user.setEncryptedPwd(encryptedPwd);
 		user.setSalt(salt);
 		user.setNickname(nickname);
-		user.setEmailAuthCode(emailAuthCode);
-		user.setRandomCode(randomCode);
+		user.setEmailRecognitionCode(emailRecognitionCode);
+		user.setAuthCode(authCode);
 		user.setAddDate(new Date(System.currentTimeMillis()));
 		
 		userService.addWaitAuthUser(user);
 		
 		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "domain");
 		String authPath = domain + "authRegisterEmail/";
-		userService.sendAuthEmail(uid, emailAuthCode, randomCode, uid, authPath);
+		userService.sendAuthEmail(uid, emailRecognitionCode, authCode, uid, authPath);
 		return "register/registerSuccess";
 	}
 	
-	@RequestMapping("/validateEmailUsable")
+	@RequestMapping("/checkEmailIsExisted")
 	@ResponseBody
-	public String validateEmailUsable(@RequestParam String uid) {
-		return userService.isUidExist(uid) || userService.isWaitAuthUidExist(uid) ? "unusable" : "usable";	
+	public String checkEmailExisted(@RequestParam String email) {
+		return userService.isUidExist(email) ? JsonStatic.STATE_EXISTED : JsonStatic.STATE_NOT_EXISTED;	
 	}
 
 	@RequestMapping("authRegisterEmail/{emailCode}/{randomCode}")
