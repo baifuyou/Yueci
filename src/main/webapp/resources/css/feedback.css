@@ -1,0 +1,26 @@
+body {
+	background-color: #eee;
+}
+
+.form-group label {
+	margin-right: 25px;
+	width: 100px;
+	margin-bottom: 0px;
+}
+
+.control-label {
+	text-align: left !important;
+	width: 100px;
+}
+
+.form-group {
+	margin-top: 25px;
+}
+
+input[type="radio"] {
+	margin-right: 5px;
+}
+
+.radio-span {
+	margin-left: 20px;
+}
