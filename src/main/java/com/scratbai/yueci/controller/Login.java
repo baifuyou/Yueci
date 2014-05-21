@@ -45,8 +45,8 @@ public class Login {
 	
 
 	@RequestMapping("/validate")
-	public String validate(@RequestParam String uid,
-			@RequestParam String password, @RequestParam(required=false) String[] rememberMe, HttpServletResponse response,
+	public String validate(@RequestParam(required=true) String uid,
+			@RequestParam(required=true) String password, @RequestParam(required=false) String[] rememberMe, HttpServletResponse response,
 			HttpSession session, Model model) {
 		ValidateResult validateResult = userService.validate(uid, password);
 		if (validateResult == ValidateResult.SUCCESS) {

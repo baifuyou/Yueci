@@ -32,7 +32,7 @@
 			</c:if>
 			<c:if test="${isLogin eq true }">
 				<div class = "topBar">
-					欢迎您，<a href="user">${user.nickname }</a> <a href="logout">注销</a>
+					欢迎您，<a href="user">${user.nickname }</a> <a href="logout">退出</a>
 				</div>
 			</c:if>
 		</div>

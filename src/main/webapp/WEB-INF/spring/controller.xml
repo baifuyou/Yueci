@@ -20,6 +20,10 @@
 		<property name="userService" ref = "userService"></property>
 	</bean>
 	
+	<bean id = "submitFeedback" class = "com.scratbai.yueci.controller.SubmitFeedback">
+		<property name="userService" ref = "userService"></property>
+	</bean>
+	
 	<bean id = "resetPassword" class = "com.scratbai.yueci.controller.ResetPassword">
 		<property name="userService" ref = "userService"></property>
 	</bean>

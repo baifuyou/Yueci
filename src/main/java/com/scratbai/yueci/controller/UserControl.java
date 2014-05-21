@@ -15,33 +15,37 @@ import com.scratbai.yueci.service.*;
 
 @Controller
 public class UserControl {
-	
+
 	@Autowired
 	private UserService userService;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@RequestMapping("user")
-	public String userSetting(HttpSession session, Model model ) {
-		User user = (User)session.getAttribute("user");
-		String speechType = user.getWordBookSpeechType().equals("am") ? "美式发音" : "英式发音";
+	public String userSetting(HttpSession session, Model model) {
+		User user = (User) session.getAttribute("user");
 		model.addAttribute("user", user);
 		return "userControl";
 	}
-	
+
 	@RequestMapping("user/saveProfileSetting")
 	@ResponseBody
-	public String saveProfileSetting(HttpSession session, String speechType, String nickname) { 
-		User user = (User)session.getAttribute("user");
+	public String saveProfileSetting(HttpSession session,
+			@RequestParam(required = true) String speechType,
+			@RequestParam(required = true) String nickname) {
+		User user = (User) session.getAttribute("user");
 		userService.setSpeechType(user, speechType);
 		userService.setNickname(user, nickname);
 		return JsonStatic.STATE_SUCCESS;
 	}
-	
+
 	@RequestMapping("user/changePassword")
 	@ResponseBody
-	public String changePassword(HttpSession session, String oldPassword, String newPassword) {
+	public String changePassword(HttpSession session,
+			@RequestParam(required = true) String oldPassword,
+			@RequestParam(required = true) String newPassword) {
 		User user = (User) session.getAttribute("user");
-		ValidateResult validateResult = userService.validate(user.getUid(), oldPassword);
+		ValidateResult validateResult = userService.validate(user.getUid(),
+				oldPassword);
 		if (validateResult != ValidateResult.SUCCESS) {
 			return JsonStatic.STATE_PASSWORD_ERROR;
 		}

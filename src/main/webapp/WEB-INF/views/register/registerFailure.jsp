@@ -13,6 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet"
 	href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel = "stylesheet" href = "resources/css/failure.css">
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script
 	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
@@ -20,7 +21,7 @@
 </head>
 <body>
 <div class = "container">
-	<div class = "alert alert-info">由于未知原因注册失败。点击<a href= "#" class = "alert-link">这里</a>报告错误！</div>
+	<div class = "alert alert-danger">由于未知原因注册失败。点击<a href= "feedback" class = "alert-link">这里</a>报告错误！</div>
 </div>
 
 </body>

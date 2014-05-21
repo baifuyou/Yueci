@@ -27,29 +27,11 @@ public class Register {
 
 	@RequestMapping("/register")
 	public String register(@RequestParam String uid,
-			@RequestParam String password, String nickname) { //TODO 重构，把主要逻辑移到service层实现
+			@RequestParam String password, String nickname) {
 		if (userService.isUidExist(uid) || userService.isWaitAuthUidExist(uid)) {
 			return "register/registerFailure";
 		}
-		String emailRecognitionCode = uid.replaceAll("[@.]", "");
-		String salt = CommonUtils.generateSalt();
-		String authCode = CommonUtils.generateRandomCode();
-		String encryptedPwd = CommonUtils.encrypt(salt + password);
-		
-		WaitAuthUser user = new WaitAuthUser();
-		user.setUid(uid);
-		user.setEncryptedPwd(encryptedPwd);
-		user.setSalt(salt);
-		user.setNickname(nickname);
-		user.setEmailRecognitionCode(emailRecognitionCode);
-		user.setAuthCode(authCode);
-		user.setAddDate(new Date(System.currentTimeMillis()));
-		
-		userService.addWaitAuthUser(user);
-		
-		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "domain");
-		String authPath = domain + "authRegisterEmail/";
-		userService.sendAuthEmail(uid, emailRecognitionCode, authCode, uid, authPath);
+		userService.register(uid, password, nickname);
 		return "register/registerSuccess";
 	}
 	

@@ -19,9 +19,6 @@
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script
 	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-
-<script type="text/javascript" src="resources/js/lib/arttemplate.js"></script>
-<script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
 <script type="text/javascript" src="resources/js/userControl.js"></script>
 </head>
 <body>

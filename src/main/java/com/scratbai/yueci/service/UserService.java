@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.scratbai.yueci.pojo.EnglishWord;
+import com.scratbai.yueci.pojo.Feedback;
 import com.scratbai.yueci.pojo.PersistentUser;
 import com.scratbai.yueci.pojo.ResetPasswordUser;
 import com.scratbai.yueci.pojo.User;
@@ -73,4 +74,8 @@ public interface UserService {
 	public void enableResetPassword(ResetPasswordUser resetPasswordUser);
 
 	public void removeResetPasswordUserByUid(String uid);
+
+	public void register(String uid, String password, String nickname);
+
+	public void addFeedback(Feedback feedback);
 }

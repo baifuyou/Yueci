@@ -13,6 +13,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet"
 	href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="resources/css/success.css">
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script
 	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
@@ -20,7 +22,7 @@
 </head>
 <body>
 <div class = "container">
-	<div class = "alert alert-info">邮箱验证成功，点击<a href= "login" class = "alert-link">登陆</a></div>
+	<div class = "alert alert-success">邮箱验证成功，点击<a href= "login" class = "alert-link">登陆</a></div>
 </div>
 
 </body>

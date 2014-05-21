@@ -398,4 +398,32 @@ public class UserServiceImpl implements UserService {
 	public void removeResetPasswordUserByUid(String uid) {
 		userDao.removeResetPasswordUser(uid);
 	}
+
+	@Override
+	public void register(String uid, String password, String nickname) {
+		String emailRecognitionCode = uid.replaceAll("[@.]", "");
+		String salt = CommonUtils.generateSalt();
+		String authCode = CommonUtils.generateRandomCode();
+		String encryptedPwd = CommonUtils.encrypt(salt + password);
+		
+		WaitAuthUser user = new WaitAuthUser();
+		user.setUid(uid);
+		user.setEncryptedPwd(encryptedPwd);
+		user.setSalt(salt);
+		user.setNickname(nickname);
+		user.setEmailRecognitionCode(emailRecognitionCode);
+		user.setAuthCode(authCode);
+		user.setAddDate(new Date(System.currentTimeMillis()));
+		
+		addWaitAuthUser(user);
+		
+		String domain = CommonUtils.getConfigValue("webAppConfig.properties", "domain");
+		String authPath = domain + "authRegisterEmail/";
+		sendAuthEmail(uid, emailRecognitionCode, authCode, uid, authPath);
+	}
+
+	@Override
+	public void addFeedback(Feedback feedback) {
+		userDao.saveObject(feedback);
+	}
 }

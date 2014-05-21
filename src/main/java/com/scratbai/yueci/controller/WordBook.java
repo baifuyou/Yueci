@@ -32,9 +32,6 @@ public class WordBook {
 	@RequestMapping(value = "wordBook/list/{pageIndex}", produces = {"application/json;charset=UTF-8"})
 	@ResponseBody
 	public String listWordsFromWordBook(HttpSession session, @PathVariable int pageIndex, Model model) {  
-		if (!checkUserLogin(session)) {
-			return "{\"state\":\"not login\"}";
-		}
 		String uid = (String) session.getAttribute("uid");
 		User user = (User) session.getAttribute("user");
 		List<EnglishWord> words = userService.getWordsFromWordBook(uid, WORD_COUNT_PER_PAGE, pageIndex);
@@ -54,14 +51,8 @@ public class WordBook {
 	}
 	
 	@RequestMapping("wordBook")
-	public String wordBook(HttpSession session) { //TODO 验证用户是否登陆
-		return checkUserLogin(session) ? "wordBook" : "redirect: login";
-	}
-
-	private boolean checkUserLogin(HttpSession session) {
-		Object user = session.getAttribute("user");
-		Object uid = session.getAttribute("uid");
-		return user != null && uid != null;
+	public String wordBook(HttpSession session) {
+		return  "wordBook";
 	}
 
 	public UserService getUserService() {
