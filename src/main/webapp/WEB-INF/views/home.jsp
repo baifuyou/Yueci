@@ -21,6 +21,7 @@
 <script type="text/javascript" src="resources/js/lib/arttemplate.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
 <title>Home-阅辞</title>
+<link rel="shortcut icon" href="resources/image/favicon.png" type="image/x-icon">
 </head>
 <body>
 	<div class="container">

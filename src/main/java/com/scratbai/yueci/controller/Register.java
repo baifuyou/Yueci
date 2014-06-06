@@ -1,14 +1,11 @@
 package com.scratbai.yueci.controller;
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
-import com.scratbai.yueci.commons.CommonUtils;
-import com.scratbai.yueci.pojo.WaitAuthUser;
 import com.scratbai.yueci.service.UserService;
 
 @Controller
@@ -18,7 +15,7 @@ public class Register {
 	private UserService userService;
 	private final static int MAX_TIME_AUTH_EMAIL_HOURS = 12;
 	
-	private Logger logger = Logger.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping("/requestRegister")
 	public String requestRegister() {

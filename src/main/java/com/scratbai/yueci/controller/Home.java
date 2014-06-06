@@ -1,5 +1,7 @@
 package com.scratbai.yueci.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.*;
 
 import org.slf4j.*;
@@ -29,10 +31,11 @@ public class Home {
 		}
 		return "home";
 	}
-	
+
 	@RequestMapping("logout")
-	public String logout(HttpServletResponse response, HttpSession session, Model model) {
-		String uid = (String)session.getAttribute("uid");
+	public String logout(HttpServletResponse response, HttpSession session,
+			Model model) {
+		String uid = (String) session.getAttribute("uid");
 		session.removeAttribute("user");
 		session.removeAttribute("uid");
 		userService.forgiveMe(response, uid);
@@ -48,7 +51,10 @@ public class Home {
 
 	@RequestMapping("searchWord/{word}")
 	@ResponseBody
-	public String searchWord(@PathVariable String word, HttpSession session) {
+	public String searchWord(@PathVariable String word, HttpSession session)
+			throws UnsupportedEncodingException {
+		byte[] bytes = word.getBytes("ISO-8859-1");
+		word = new String(bytes, "UTF-8");
 		logger.debug("request search:" + word);
 		User user = session.getAttribute("user") == null ? null
 				: (User) session.getAttribute("user");

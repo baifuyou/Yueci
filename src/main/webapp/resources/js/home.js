@@ -31,6 +31,7 @@ $(function() {
 			function(event) {
 				event.preventDefault();
 				var word = $("#searchWord").val();
+				word = isChinese(word) ? word : word.toLowerCase();
 				$("title").html(word + "," + $("title").html());
 				var searchPath = "searchWord/" + word;
 				$.getJSON(searchPath,

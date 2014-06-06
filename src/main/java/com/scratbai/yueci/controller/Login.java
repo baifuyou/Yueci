@@ -27,11 +27,14 @@ public class Login {
 	private UserService userService;
 
 	@RequestMapping("/login/{errorInfo}")
-	public String requestLogin(@PathVariable String errorInfo, Model model) {
+	public String requestLogin(@PathVariable String errorInfo, Model model)
+			throws UnsupportedEncodingException {
+		byte[] bytes = errorInfo.getBytes("ISO-8859-1");
+		errorInfo = new String(bytes, "UTF-8");
 		model.addAttribute("errorInfo", errorInfo);
 		return "login";
 	}
-	
+
 	@RequestMapping("/login")
 	public String requestLogin(HttpSession session, Model model) {
 		Object user = session.getAttribute("user");
@@ -42,12 +45,12 @@ public class Login {
 		model.addAttribute("errorInfo");
 		return "login";
 	}
-	
 
 	@RequestMapping("/validate")
-	public String validate(@RequestParam(required=true) String uid,
-			@RequestParam(required=true) String password, @RequestParam(required=false) String[] rememberMe, HttpServletResponse response,
-			HttpSession session, Model model) {
+	public String validate(@RequestParam(required = true) String uid,
+			@RequestParam(required = true) String password,
+			@RequestParam(required = false) String[] rememberMe,
+			HttpServletResponse response, HttpSession session, Model model) {
 		ValidateResult validateResult = userService.validate(uid, password);
 		if (validateResult == ValidateResult.SUCCESS) {
 			if (rememberMe != null && rememberMe.length != 0) {
@@ -60,10 +63,11 @@ public class Login {
 			session.setAttribute("uid", uid);
 			return "redirect:home";
 		}
-		
+
 		String result = "";
 		try {
-			result = "redirect:login/" + URLEncoder.encode(validateResult.toString(), "UTF-8");
+			result = "redirect:login/"
+					+ URLEncoder.encode(validateResult.toString(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -75,9 +79,10 @@ public class Login {
 	}
 
 	private void rememberMe(HttpServletResponse response, String uid) {
-		userService.rememberMe(response, uid, PERSISTENT_LOGIN_EFFECTIVE_SECONDS);
+		userService.rememberMe(response, uid,
+				PERSISTENT_LOGIN_EFFECTIVE_SECONDS);
 	}
-	
+
 	public UserService getUserService() {
 		return userService;
 	}
