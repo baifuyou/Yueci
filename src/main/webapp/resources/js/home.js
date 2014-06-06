@@ -93,10 +93,14 @@ function isChinese(word) {
 function renderEnglishSymbolsHtml(response, comparIndex) {
 	var data = response.wordObject;
 	var existInWordBook = response.existInWordBook;
-	var symbolsData = data.symbols.map(function(symbol) {
-		// 过滤parts数组下无内容的part（官方api的问题）
+	//过滤无效的symbol（修复官方api的问题）
+	var symbols = data.symbols.filter(function(symbol) {
+		return symbol.parts != null;
+	});
+	var symbolsData = symbols.map(function(symbol) {
+		// 过滤parts数组下无内容的part（修复官方api的问题）
 		symbol.parts = symbol.parts.filter(function(part) {
-			return typeof part.means != "undefined";
+			return part.means != null;
 		});
 		var means = symbol.parts.map(function(part) {
 			var mean = part.means.join(",");
