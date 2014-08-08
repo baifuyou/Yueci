@@ -2,11 +2,11 @@ package com.scratbai.yueci.commons;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.*;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public class CommonUtils {
 	private static final int SYMBOLS_LENGTH = SYMBOLS.length;
 	private static final Logger logger = LoggerFactory
 			.getLogger(CommonUtils.class);
-	private static final Map<String, String> keyValueCache = new HashMap<String, String>();
+	private static final Map<String, String> keyValueCache = new ConcurrentHashMap<String, String>();
 
 	/*
 	 * 生成六位随机码
