@@ -84,7 +84,7 @@ public class CommonUtils {
 	 * 从配置文件fileName中读取key的值 如果fileName不存在或者key不存在，将返回null
 	 */
 	public static String getConfigValue(String fileName, String key) {
-		String cacheKey = fileName + ":" + key;
+		String cacheKey = fileName + "：" + key;
 		String cacheValue = keyValueCache.get(cacheKey);
 		if (cacheValue != null) {
 			return cacheValue;
