@@ -21,7 +21,8 @@
 <script type="text/javascript" src="resources/js/lib/arttemplate.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
 <title>Home-阅辞</title>
-<link rel="shortcut icon" href="resources/image/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="resources/image/favicon.png"
+	type="image/x-icon">
 </head>
 <body>
 	<div class="container">
@@ -32,7 +33,7 @@
 				</div>
 			</c:if>
 			<c:if test="${isLogin eq true }">
-				<div class = "topBar">
+				<div class="topBar">
 					欢迎您，<a href="user">${user.nickname }</a> <a href="logout">退出</a>
 				</div>
 			</c:if>
@@ -45,7 +46,8 @@
 				<div class="form-group">
 					<input id="searchButton" type="submit" class="btn btn-primary"
 						value="搜索"> <input id="comparisonButton" type="submit"
-						class="btn btn-primary" disabled="disabled" value="对比" title = "Ctrl + Enter">
+						class="btn btn-primary" disabled="disabled" value="对比"
+						title="Ctrl + Enter">
 				</div>
 			</form>
 		</div>
@@ -125,7 +127,30 @@
 			</div>
 		</div>
 		<div id="relatedWordCW"></div>
+		<div  id="remindLoginModal" class="modal fade" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+						</button>
+						<h4 class="modal-title">您还没有登陆...</h4>
+					</div>
+					<div class = "modal-body">
+						<span>您需要先登录</span>
+					</div>
+					<div class="modal-footer">
+						<button id="cancel" type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						<button id="gotoLogin" type="button" class="btn btn-default">登录</button>
+						<button id="gotoRegister" type="button" class="btn btn-default">注册</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<button class="btn btn-primary btn-lg" data-toggle="modal"
+			data-target="#remindLoginModal">Launch demo modal</button>
 	</div>
-<label id = "searchRequestWord" class = "hidden">${word }</label>
+	<label id="searchRequestWord" class="hidden">${word }</label>
 </body>
 </html>

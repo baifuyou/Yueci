@@ -53,6 +53,16 @@ $(function() {
 		}
 	});
 
+	$("#gotoLogin").click(function(event) {
+		console.log("gotoLogin click" + ": "+ $("#loginRef").attr("href"));
+		location.href = "login"
+	});
+	
+	$("#gotoRegister").click(function(event) {
+		console.log("gotoLogin click" + ": "+ $("#loginRef").attr("href"));
+		location.href = "requestRegister"
+	});
+
 	searchRequestWord();
 
 });
@@ -65,7 +75,6 @@ function searchRequestWord() {
 	console.log("searchRequestWord:" + word);
 	if (word == "" || word == null)
 		return
-
 	$("#searchWord").val(word);
 	$("#searchButton").click();
 }
@@ -93,7 +102,7 @@ function isChinese(word) {
 function renderEnglishSymbolsHtml(response, comparIndex) {
 	var data = response.wordObject;
 	var existInWordBook = response.existInWordBook;
-	//过滤无效的symbol（修复官方api的问题）
+	// 过滤无效的symbol（修复官方api的问题）
 	var symbols = data.symbols.filter(function(symbol) {
 		return symbol.parts != null;
 	});
@@ -210,26 +219,8 @@ function addToWordBook(word, comIndex, ind) {
 	});
 }
 
-function remindLogin() { //TODO 更改实现，，，，！！！！，，，，，非常重要
-	var dialog = art.dialog({
-		title : "您需要先登陆",
-		content : '登陆?或者注册一个账号？',
-		lock : true,
-		button : [ {
-			name : '登陆',
-			callback : function() {
-				location.href = "login";
-			},
-			focus : true
-		}, {
-			name : '注册',
-			callback : function() {
-				location.href = "requestRegister";
-			}
-		}, {
-			name : '取消'
-		} ]
-	});
+function remindLogin() {
+	$("#remindLoginModal").modal('show');
 }
 
 function devolopMeans(comparIndex, index) {
