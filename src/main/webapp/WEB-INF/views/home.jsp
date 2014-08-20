@@ -148,8 +148,6 @@
 			</div>
 			<!-- /.modal-dialog -->
 		</div>
-		<button class="btn btn-primary btn-lg" data-toggle="modal"
-			data-target="#remindLoginModal">Launch demo modal</button>
 	</div>
 	<label id="searchRequestWord" class="hidden">${word }</label>
 </body>
