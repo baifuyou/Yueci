@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 
 import org.slf4j.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scratbai.yueci.commons.CommonUtils;
 import com.scratbai.yueci.dao.UserDao;
@@ -425,5 +426,34 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void addFeedback(Feedback feedback) {
 		userDao.saveObject(feedback);
+	}
+
+	@Override
+	public String fuzzySearch(String word) {
+		List<WordsTableItem> words = userDao.fuzzySearch(word);
+		final int maxItemsCount = 8;
+		/*words.sort(new Comparator<WordsTableItem>() {
+
+			@Override
+			public int compare(WordsTableItem o1, WordsTableItem o2) {
+				return o2.getFrequency() - o1.getFrequency();
+			}
+			
+		});
+		if (words.size() > maxItemsCount) {
+			words = words.subList(0, maxItemsCount);
+		}*/
+		List<String> wordsString = new ArrayList<String>();
+		for (WordsTableItem wordItem : words) {
+			wordsString.add(wordItem.getName());
+		}
+		String wordsJson = null;
+		try {
+			wordsJson = objectMapper.writer().writeValueAsString(wordsString);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return wordsJson;
 	}
 }

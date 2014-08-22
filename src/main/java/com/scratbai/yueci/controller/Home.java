@@ -31,6 +31,12 @@ public class Home {
 		}
 		return "home";
 	}
+	
+	@RequestMapping("fuzzySearch/{word}")
+	@ResponseBody
+	public String fuzzySearch(@PathVariable String word) {
+		return userService.fuzzySearch(word);
+	}
 
 	@RequestMapping("logout")
 	public String logout(HttpServletResponse response, HttpSession session,
@@ -64,6 +70,7 @@ public class Home {
 		} else {
 			response = userService.searchWord(user, word);
 		}
+		System.out.println(response);
 		return response;
 	}
 

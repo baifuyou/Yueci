@@ -1,6 +1,7 @@
 package com.scratbai.yueci.dao;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
@@ -34,8 +35,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public String getauthCodeByemailRecoginitionCode(String emailRecognitionCode) {
 		DBCollection collection = db.getCollection("waitAuthUsers");
-		DBObject object = collection.findOne(new BasicDBObject("emailRecognitionCode",
-				emailRecognitionCode), new BasicDBObject("authCode", "1"));
+		DBObject object = collection.findOne(new BasicDBObject(
+				"emailRecognitionCode", emailRecognitionCode),
+				new BasicDBObject("authCode", "1"));
 		return object == null ? null : (String) object.get("authCode");
 	}
 
@@ -146,21 +148,22 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void deletePersistentUserByUid(String uid) {
-		Query<PersistentUser> query = datastore.createQuery(PersistentUser.class)
-				.filter("uid =", uid);
+		Query<PersistentUser> query = datastore.createQuery(
+				PersistentUser.class).filter("uid =", uid);
 		datastore.delete(query);
 	}
 
 	@Override
 	public PersistentUser getPersistentUserByPersistentId(String persistentId) {
-		PersistentUser persistentUser =  datastore.find(PersistentUser.class, "persistentId =", persistentId).get();
+		PersistentUser persistentUser = datastore.find(PersistentUser.class,
+				"persistentId =", persistentId).get();
 		return persistentUser;
 	}
 
 	@Override
 	public void deletePersistentUserByPersistentId(String persistentId) {
-		Query<PersistentUser> query = datastore.createQuery(PersistentUser.class)
-				.filter("persistentId =", persistentId);
+		Query<PersistentUser> query = datastore.createQuery(
+				PersistentUser.class).filter("persistentId =", persistentId);
 		datastore.delete(query);
 	}
 
@@ -173,19 +176,41 @@ public class UserDaoImpl implements UserDao {
 	public ResetPasswordUser getResetPasswordUserByEmailRecognitionCode(
 			String emailRecognitionCode) {
 		logger.debug("emailRecognitionCode" + emailRecognitionCode);
-		return datastore.find(ResetPasswordUser.class, "emailRecognitionCode =", emailRecognitionCode).get();
+		return datastore.find(ResetPasswordUser.class,
+				"emailRecognitionCode =", emailRecognitionCode).get();
 	}
 
 	@Override
 	public void removeWaitAuthUserByUid(String uid) {
-		datastore.delete(datastore.find(WaitAuthUser.class, "uid =",
-				uid));
+		datastore.delete(datastore.find(WaitAuthUser.class, "uid =", uid));
 	}
 
 	@Override
 	public void removeResetPasswordUser(String uid) {
-		Query<ResetPasswordUser> query = datastore.createQuery(ResetPasswordUser.class).filter("uid =", uid);
+		Query<ResetPasswordUser> query = datastore.createQuery(
+				ResetPasswordUser.class).filter("uid =", uid);
 		datastore.delete(query);
+	}
+
+	@Override
+	public List<WordsTableItem> fuzzySearch(String word) {
+		DBCollection coll = db.getCollection("wordsTable");
+		DBCursor dbc = coll
+				.find(new BasicDBObject("name", new BasicDBObject("$regex", "^"
+						+ word + ".*$")))
+				.sort(new BasicDBObject("frequency", -1)).limit(8);
+		List<WordsTableItem> fuzzyWords = new ArrayList<WordsTableItem>();
+		while (dbc.hasNext()) {
+			WordsTableItem wordItem = new WordsTableItem();
+			DBObject dbo = dbc.next();
+			wordItem.setName((String) dbo.get("name"));
+			wordItem.setFrequency((Integer) dbo.get("frequency"));
+			fuzzyWords.add(wordItem);
+		}
+		// Pattern pattern = Pattern.compile("^" + word + "\\.*$");
+		// Query<WordsTableItem> query =
+		// datastore.createQuery(WordsTableItem.class).limit(8);
+		return fuzzyWords;
 	}
 
 }

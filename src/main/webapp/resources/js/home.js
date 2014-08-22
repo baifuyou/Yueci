@@ -54,16 +54,28 @@ $(function() {
 	});
 
 	$("#gotoLogin").click(function(event) {
-		console.log("gotoLogin click" + ": "+ $("#loginRef").attr("href"));
+		console.log("gotoLogin click" + ": " + $("#loginRef").attr("href"));
 		location.href = "login"
 	});
-	
+
 	$("#gotoRegister").click(function(event) {
-		console.log("gotoLogin click" + ": "+ $("#loginRef").attr("href"));
-		location.href = "requestRegister"
+		console.log("gotoLogin click" + ": " + $("#loginRef").attr("href"));
+		location.href = "requestRegister";
 	});
 
 	searchRequestWord();
+	
+	$("#searchWord").typeahead({
+		source : function(query, process) {
+			var url = "fuzzySearch/" + query;
+			console.log("typeahead invoke");
+			$.getJSON(url, function(data) {
+				console.log("getJSON success")
+				process(data);
+				console.log(data);
+			});
+		}
+	});
 
 });
 
@@ -72,9 +84,9 @@ $(function() {
  */
 function searchRequestWord() {
 	var word = $("#searchRequestWord").text();
-	console.log("searchRequestWord:" + word);
 	if (word == "" || word == null)
 		return
+
 	$("#searchWord").val(word);
 	$("#searchButton").click();
 }

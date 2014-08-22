@@ -8,6 +8,7 @@ import com.scratbai.yueci.pojo.PersistentUser;
 import com.scratbai.yueci.pojo.ResetPasswordUser;
 import com.scratbai.yueci.pojo.User;
 import com.scratbai.yueci.pojo.WaitAuthUser;
+import com.scratbai.yueci.pojo.WordsTableItem;
 
 public interface UserDao {
 
@@ -54,5 +55,7 @@ public interface UserDao {
 	void removeWaitAuthUserByUid(String uid);
 
 	void removeResetPasswordUser(String uid);
+
+	List<WordsTableItem> fuzzySearch(String word);
 
 }

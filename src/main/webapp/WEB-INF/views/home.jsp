@@ -14,12 +14,12 @@
 <link rel="stylesheet"
 	href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/home.css">
-<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="resources/js/lib/jquery-2.0.2.min.js"></script>
 <script
 	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="resources/js/home.js"></script>
-<script type="text/javascript" src="resources/js/lib/arttemplate.js"></script>
+<script type="text/javascript" src="resources/js/lib/bootstrap3-typeahead.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
+<script type="text/javascript" src="resources/js/home.js"></script>
 <title>Home-阅辞</title>
 <link rel="shortcut icon" href="resources/image/favicon.png"
 	type="image/x-icon">
@@ -41,7 +41,7 @@
 		<div id="searchBox">
 			<form class="form-inline" action="#">
 				<div class="form-group">
-					<input class="form-control wordInput" id="searchWord" type="text">
+					<input id="searchWord" type="text" class="form-control wordInput" autocomplete="off" data-provide="typeahead">
 				</div>
 				<div class="form-group">
 					<input id="searchButton" type="submit" class="btn btn-primary"
@@ -127,19 +127,20 @@
 			</div>
 		</div>
 		<div id="relatedWordCW"></div>
-		<div  id="remindLoginModal" class="modal fade" aria-hidden="true">
+		<div id="remindLoginModal" class="modal fade" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
-						</button>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
 						<h4 class="modal-title">您还没有登陆...</h4>
 					</div>
-					<div class = "modal-body">
+					<div class="modal-body">
 						<span>您需要先登录</span>
 					</div>
 					<div class="modal-footer">
-						<button id="cancel" type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+						<button id="cancel" type="button" class="btn btn-primary"
+							data-dismiss="modal">取消</button>
 						<button id="gotoLogin" type="button" class="btn btn-default">登录</button>
 						<button id="gotoRegister" type="button" class="btn btn-default">注册</button>
 					</div>

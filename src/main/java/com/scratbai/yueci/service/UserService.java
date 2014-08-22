@@ -78,4 +78,6 @@ public interface UserService {
 	public void register(String uid, String password, String nickname);
 
 	public void addFeedback(Feedback feedback);
+
+	public String fuzzySearch(String word);
 }
