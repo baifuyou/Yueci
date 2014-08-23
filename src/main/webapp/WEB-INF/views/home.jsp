@@ -11,12 +11,10 @@
 			+ path + "/";
 %>
 <base href="<%=basePath%>" />
-<link rel="stylesheet"
-	href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/lib/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/home.css">
-<script src="resources/js/lib/jquery-2.0.2.min.js"></script>
-<script
-	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/bootstrap.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/bootstrap3-typeahead.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
 <script type="text/javascript" src="resources/js/home.js"></script>

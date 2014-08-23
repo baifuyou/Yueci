@@ -194,23 +194,10 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<WordsTableItem> fuzzySearch(String word) {
-		DBCollection coll = db.getCollection("wordsTable");
-		DBCursor dbc = coll
-				.find(new BasicDBObject("name", new BasicDBObject("$regex", "^"
-						+ word + ".*$")))
-				.sort(new BasicDBObject("frequency", -1)).limit(8);
-		List<WordsTableItem> fuzzyWords = new ArrayList<WordsTableItem>();
-		while (dbc.hasNext()) {
-			WordsTableItem wordItem = new WordsTableItem();
-			DBObject dbo = dbc.next();
-			wordItem.setName((String) dbo.get("name"));
-			wordItem.setFrequency((Integer) dbo.get("frequency"));
-			fuzzyWords.add(wordItem);
-		}
-		// Pattern pattern = Pattern.compile("^" + word + "\\.*$");
-		// Query<WordsTableItem> query =
-		// datastore.createQuery(WordsTableItem.class).limit(8);
-		return fuzzyWords;
+		 Pattern pattern = Pattern.compile("^" + word + ".*$");
+		 Query<WordsTableItem> query =
+		 datastore.createQuery(WordsTableItem.class).filter("name", pattern).order("-frequency").limit(8);
+		return query.asList();
 	}
 
 }

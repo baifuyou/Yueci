@@ -64,16 +64,29 @@ $(function() {
 	});
 
 	searchRequestWord();
-	
+
 	$("#searchWord").typeahead({
 		source : function(query, process) {
 			var url = "fuzzySearch/" + query;
-			console.log("typeahead invoke");
 			$.getJSON(url, function(data) {
-				console.log("getJSON success")
 				process(data);
 				console.log(data);
 			});
+		},
+		items : 9,
+		matcher : function(item) {
+			return true;
+		},
+		sorter : function(items) {
+			console.log(items);
+			return items;
+		},
+		updater : function(item) {
+			if (item == "") {
+				return this.query;
+			} else {
+				return item;
+			}
 		}
 	});
 
@@ -86,6 +99,8 @@ function searchRequestWord() {
 	var word = $("#searchRequestWord").text();
 	if (word == "" || word == null)
 		return
+
+	
 
 	$("#searchWord").val(word);
 	$("#searchButton").click();

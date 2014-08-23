@@ -431,19 +431,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String fuzzySearch(String word) {
 		List<WordsTableItem> words = userDao.fuzzySearch(word);
-		final int maxItemsCount = 8;
-		/*words.sort(new Comparator<WordsTableItem>() {
-
-			@Override
-			public int compare(WordsTableItem o1, WordsTableItem o2) {
-				return o2.getFrequency() - o1.getFrequency();
-			}
-			
-		});
-		if (words.size() > maxItemsCount) {
-			words = words.subList(0, maxItemsCount);
-		}*/
 		List<String> wordsString = new ArrayList<String>();
+		wordsString.add("");
 		for (WordsTableItem wordItem : words) {
 			wordsString.add(wordItem.getName());
 		}

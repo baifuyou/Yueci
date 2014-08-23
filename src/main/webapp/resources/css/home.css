@@ -2,6 +2,7 @@
 	padding-top: 20px;
 	font-size: 18px;
 }
+
 #remindLogin {
 	padding-bottom: 10px;
 }
@@ -11,8 +12,8 @@
 	font-size: 18px;
 }
 
-.wordInput {
-	#margin-left:160px;
+.wordInput { #
+	margin-left: 160px;
 	width: 600px;
 	margin-right: 10px;
 	font-size: 22px;
@@ -29,27 +30,45 @@
 }
 
 .cutOffLine {
-	height:1px;
-	background-color:rgb(207, 198, 198);
-	margin-bottom:15px;
-	margin-top:5px;
+	height: 1px;
+	background-color: rgb(207, 198, 198);
+	margin-bottom: 15px;
+	margin-top: 5px;
 }
 
 .wordName {
 	font-weight: 700;
 	font-size: 24px;
 }
+
 .container {
 	width: 800px;
 }
+
 body {
 	background-color: #eee;
 }
+
 a {
 	cursor: pointer;
 }
 
-.topBar a{
+.topBar a {
 	margin-right: 10px;
 }
 
+ul li:first-child a {
+	background-image: initial !important; 
+	background-position-x: initial !important;
+	background-position-y: initial !important;
+	background-size: initial !important;
+	background-repeat-x: initial !important;
+	background-repeat-y: initial !important;
+	background-attachment: initial !important;
+	background-origin: initial !important;
+	background-clip: initial !important;
+	background-color: transparent !important;
+}
+.typeahead.dropdown-menu {
+	width : 600px;
+}
