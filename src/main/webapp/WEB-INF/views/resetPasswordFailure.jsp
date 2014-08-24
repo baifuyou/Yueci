@@ -5,12 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>重置密码失败</title>
-<link rel="stylesheet"
-	href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
-<link rel = "stylesheet" href = "resources/css/failure.css">
-<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/failure.css">
+<script type="text/javascript" src="resources/js/lib/jquery-2.0.2.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/bootstrap.min.js"></script>
 </head>
 <body>
 <div class = "container">

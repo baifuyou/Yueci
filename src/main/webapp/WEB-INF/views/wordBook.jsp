@@ -12,7 +12,7 @@
 			+ path + "/";
 %>
 <base href="<%=basePath%>" />
-<link rel="stylesheet" href="resources/css/lib/bootstrap.min.css">
+<link rel="stylesheet" href="resources/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/wordBook.css">
 
 <script type="text/javascript" src="resources/js/lib/jquery-2.0.2.min.js"></script>
