@@ -1,6 +1,6 @@
 #searchResult {
 	padding-top: 20px;
-	font-size: 18px;
+	font-size: 1.3em;
 }
 
 #remindLogin {
@@ -42,7 +42,7 @@
 }
 
 .container {
-	width: 800px;
+	width: 1200px;
 }
 
 body {
@@ -69,6 +69,20 @@ ul li:first-child a {
 	background-clip: initial !important;
 	background-color: transparent !important;
 }
+
 .typeahead.dropdown-menu {
 	width : 600px;
+}
+
+.historyList {
+	margin-top: 100px;
+	font-size: 1.3em;
+}
+
+.historyList li {
+	margin: 10px;
+}
+
+.historyList .title {
+	margin-left: 30px;
 }

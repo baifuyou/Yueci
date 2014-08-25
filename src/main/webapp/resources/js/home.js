@@ -24,6 +24,7 @@ $(function() {
 				$("#searchEW").removeClass("show").addClass("hidden");
 				renderChineseWord(response);
 			}
+			renderHistoryList(word);
 		});
 	});
 
@@ -43,6 +44,7 @@ $(function() {
 							setClickEvent(response.wordObject,
 									$.comparisonCounter - 1);
 						});
+				renderHistoryList(word);
 			});
 
 	$("#searchWord").keydown(function(event) {
@@ -51,6 +53,12 @@ $(function() {
 				$("#comparisonButton").click();
 			}
 		}
+	});
+
+	$(".historyList a").click(function(event) {
+		var wordName = $(this).text();
+		$("#searchWord").val(wordName);
+		$("#searchButton").click();
 	});
 
 	$("#gotoLogin").click(function(event) {
@@ -92,16 +100,27 @@ $(function() {
 
 });
 
+function renderHistoryList(word) {
+	var newLiHtml = "<li><a>" + word + "</a></li>";
+	if ($(".historyList ul").has("li").length == 0) {
+		$(".historyList ul").html(newLiHtml);
+		console.log("ulHtml == ")
+	} else {
+		$(".historyList li:first-child").before(newLiHtml);
+	}
+	while ($(".historyList li").length > 10) {
+		console.log($(".historyList li").length)
+		$(".historyList li")[$(".historyList li").length - 1].remove();
+	}
+}
+
 /*
  * 提供服务端渲染的模拟，从searchWord标签中获取word参数，
  */
 function searchRequestWord() {
 	var word = $("#searchRequestWord").text();
 	if (word == "" || word == null)
-		return
-
-	
-
+		return;
 	$("#searchWord").val(word);
 	$("#searchButton").click();
 }

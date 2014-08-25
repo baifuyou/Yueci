@@ -13,9 +13,11 @@
 <base href="<%=basePath%>" />
 <link rel="stylesheet" href="resources/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/home.css">
-<script type="text/javascript" src="resources/js/lib/jquery-2.0.2.min.js"></script>
+<script type="text/javascript"
+	src="resources/js/lib/jquery-2.0.2.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/bootstrap.min.js"></script>
-<script type="text/javascript" src="resources/js/lib/bootstrap3-typeahead.js"></script>
+<script type="text/javascript"
+	src="resources/js/lib/bootstrap3-typeahead.js"></script>
 <script type="text/javascript" src="resources/js/lib/template-simple.js"></script>
 <script type="text/javascript" src="resources/js/home.js"></script>
 <title>Home-阅辞</title>
@@ -24,39 +26,57 @@
 </head>
 <body>
 	<div class="container">
-		<div id="remindLogin">
-			<c:if test="${isLogin ne true}">
-				<div>
-					<a href="login"><span class="label label-primary">登陆</span></a>
-				</div>
-			</c:if>
-			<c:if test="${isLogin eq true }">
-				<div class="topBar">
-					欢迎您，<a href="user">${user.nickname }</a> <a href="logout">退出</a>
-				</div>
-			</c:if>
+		<div class="row">
+			<div id="remindLogin">
+				<c:if test="${isLogin ne true}">
+					<div>
+						<a href="login"><span class="label label-primary">登陆</span></a>
+					</div>
+				</c:if>
+				<c:if test="${isLogin eq true }">
+					<div class="topBar">
+						欢迎您，<a href="user">${user.nickname }</a> <a href="logout">退出</a>
+					</div>
+				</c:if>
+			</div>
 		</div>
-		<div id="searchBox">
-			<form class="form-inline" action="#">
-				<div class="form-group">
-					<input id="searchWord" type="text" class="form-control wordInput" autocomplete="off" data-provide="typeahead">
+		<div class="row">
+			<div class="historyList col-md-2">
+				<h3 class="title">查询历史</h3>
+				<div class="cutOffLine"></div>
+				<script id="historyListTemplate" type="text/html">
+						<ul>
+							{{each wordNames as wordName index}}
+								<li><a>{{wordName}}</a></li>
+							{{/each}}
+						</ul>
+				</script>
+				<ul>
+				</ul>
+			</div>
+			<div class="mainContent col-md-8">
+				<div id="searchBox">
+					<form class="form-inline" action="#">
+						<div class="form-group">
+							<input id="searchWord" type="text" class="form-control wordInput"
+								autocomplete="off" data-provide="typeahead">
+						</div>
+						<div class="form-group">
+							<input id="searchButton" type="submit" class="btn btn-primary"
+								value="搜索"> <input id="comparisonButton" type="submit"
+								class="btn btn-primary" disabled="disabled" value="对比"
+								title="Ctrl + Enter">
+						</div>
+					</form>
 				</div>
-				<div class="form-group">
-					<input id="searchButton" type="submit" class="btn btn-primary"
-						value="搜索"> <input id="comparisonButton" type="submit"
-						class="btn btn-primary" disabled="disabled" value="对比"
-						title="Ctrl + Enter">
-				</div>
-			</form>
-		</div>
-		<div id="mp3Play">
-			<script id="mp3Template" type="text/html">
+				<div id="mp3Play">
+					<script id="mp3Template" type="text/html">
 				<object height="0" width="0" data="{{mp3}}"></object>
 			</script>
-		</div>
-		<div id="searchResult">
-			<div id="searchEW" class="hidden">
-				<script id="wordInfoEW" type="text/html">
+				</div>
+				<div id="searchResult">
+					<div id="searchEW" class="hidden">
+						<script id="wordInfoEW" type="text/html">
 				{{each symbols as symbol index}}
 				<div class="wordInfoEn">
 				<div class = "wordName">
@@ -91,9 +111,9 @@
 				{{/each}}
 			</div>
 			</script>
-			</div>
-			<div id="searchCW" class="hidden col-md-8">
-				<script id="wordInfoCW" type="text/html">
+					</div>
+					<div id="searchCW" class="hidden col-md-8">
+						<script id="wordInfoCW" type="text/html">
 			{{each symbols as symbol index}}
 			<div class="wordInfoCW">
 				<div>{{symbol.wordPronounce}}
@@ -122,8 +142,12 @@
 			</div>
 			{{/each}}
 			</script>
+					</div>
+				</div>
 			</div>
 		</div>
+
+
 		<div id="relatedWordCW"></div>
 		<div id="remindLoginModal" class="modal fade" aria-hidden="true">
 			<div class="modal-dialog">
