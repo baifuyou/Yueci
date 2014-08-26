@@ -113,7 +113,7 @@ function renderHistoryList(word) {
 function searchRequestWord() {
 	var word = $("#searchRequestWord").text();
 	if (word == "" || word == null)
-		return;
+		return; 
 	$("#searchWord").val(word);
 	$("#searchButton").click();
 }
