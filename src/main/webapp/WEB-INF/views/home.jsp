@@ -81,21 +81,23 @@
 				<div class="wordInfoEn">
 				<div class = "wordName">
 					<p>{{symbol.wordName}}
-						<a id="addToWordBook{{comparisonIndex}}{{index}}" title = "{{starTitle}}" word = "{{symbol.wordName}}">
+						<a class="addToWordBook" title = "{{starTitle}}" word = "{{symbol.wordName}}">
 							<span  class = "glyphicon {{starType}}"></span>
 						</a>
 					</p>
 				</div>
-				<a class = "toggle" id = "toggleButton{{comparisonIndex}}{{index}}"><span>∧</span></a>
+				<a class = "toggleButton"><span>∧</span></a>
 				<div class = "cutOffLine"></div>
-				<div id = "content{{comparisonIndex}}{{index}}">
+				<div class = "content">
 				<div>
 					英<span>:[{{symbol.ph_en}}]</span>
-					<a id="phEnPlayEW{{comparisonIndex}}{{index}}" class = "pronounceButton">
+					<a class = "playPhEnEW pronounceButton">
+						<span class = "hidden enMp3">{{symbol.enMp3}}</span>
 						<span class="glyphicon glyphicon-volume-up"></span>
 					</a>
 					美<span>:[{{symbol.ph_am}}]</span>
-					<a id="phAmPlayEW{{comparisonIndex}}{{index}}" class = "pronounceButton">
+					<a class = "playPhAmEW pronounceButton">
+						<span class = "hidden amMp3">{{symbol.amMp3}}</span>
 						<span class="glyphicon glyphicon-volume-up"></span>
 					</a>
 				</div>
@@ -112,12 +114,13 @@
 			</div>
 			</script>
 					</div>
-					<div id="searchCW" class="hidden col-md-8">
+					<div id="searchCW" class="hidden">
 						<script id="wordInfoCW" type="text/html">
 			{{each symbols as symbol index}}
 			<div class="wordInfoCW">
-				<div>{{symbol.wordPronounce}}
-				<a id="pronounceCW{{index}}" class = "pronounceButton">
+				<div class = "phCW">{{symbol.wordPronounce}}
+				<a class="playPhCW pronounceButton">
+					<span class = "hidden mp3CW">{{symbol.mp3}}</span>
 					<span class="glyphicon glyphicon-volume-up"></span>
 				</a>
 				</div>

@@ -1,6 +1,5 @@
 $(function() {
 	$("#searchButton").click(function(event) {
-		$.comparisonCounter = 0;
 		event.preventDefault();
 		var word = $("#searchWord").val();
 		word = isChinese(word) ? word : word.toLowerCase();
@@ -28,24 +27,24 @@ $(function() {
 		});
 	});
 
-	$("#comparisonButton").click(
-			function(event) {
-				event.preventDefault();
-				var word = $("#searchWord").val();
-				word = isChinese(word) ? word : word.toLowerCase();
-				$("title").html(word + "," + $("title").html());
-				var searchPath = "searchWord/" + word;
-				$.getJSON(searchPath,
-						function(response) {
-							var html = renderEnglishSymbolsHtml(response,
-									$.comparisonCounter++);
-							$("<br/>").appendTo("#searchEW");
-							$(html).appendTo("#searchEW");
-							setClickEvent(response.wordObject,
-									$.comparisonCounter - 1);
-						});
-				renderHistoryList(word);
-			});
+	$("#comparisonButton").click(function(event) {
+		event.preventDefault();
+		var word = $("#searchWord").val();
+		word = isChinese(word) ? word : word.toLowerCase();
+		$("title").html(word + "," + $("title").html());
+		var searchPath = "searchWord/" + word;
+		$.getJSON(searchPath, function(response) {
+			var html = "";
+			if (response.wordObject.word_name == null) {
+				html = "抱歉，找不到您要找的单词！";
+			} else {
+				html = renderEnglishSymbolsHtml(response);
+			}
+			$(html).appendTo("#searchEW");
+			setClickEvent(response.wordObject);
+		});
+		renderHistoryList(word);
+	});
 
 	$("#searchWord").keydown(function(event) {
 		if ($("#comparisonButton").attr("disabled") != "disabled") {
@@ -62,12 +61,10 @@ $(function() {
 	});
 
 	$("#gotoLogin").click(function(event) {
-		console.log("gotoLogin click" + ": " + $("#loginRef").attr("href"));
 		location.href = "login"
 	});
 
 	$("#gotoRegister").click(function(event) {
-		console.log("gotoLogin click" + ": " + $("#loginRef").attr("href"));
 		location.href = "requestRegister";
 	});
 
@@ -78,7 +75,6 @@ $(function() {
 			var url = "fuzzySearch/" + query;
 			$.getJSON(url, function(data) {
 				process(data);
-				console.log(data);
 			});
 		},
 		items : 9,
@@ -86,7 +82,6 @@ $(function() {
 			return true;
 		},
 		sorter : function(items) {
-			console.log(items);
 			return items;
 		},
 		updater : function(item) {
@@ -104,12 +99,10 @@ function renderHistoryList(word) {
 	var newLiHtml = "<li><a>" + word + "</a></li>";
 	if ($(".historyList ul").has("li").length == 0) {
 		$(".historyList ul").html(newLiHtml);
-		console.log("ulHtml == ")
 	} else {
 		$(".historyList li:first-child").before(newLiHtml);
 	}
 	while ($(".historyList li").length > 10) {
-		console.log($(".historyList li").length)
 		$(".historyList li")[$(".historyList li").length - 1].remove();
 	}
 }
@@ -145,7 +138,7 @@ function isChinese(word) {
 	return reg.test(word);
 }
 
-function renderEnglishSymbolsHtml(response, comparIndex) {
+function renderEnglishSymbolsHtml(response) {
 	var data = response.wordObject;
 	var existInWordBook = response.existInWordBook;
 	// 过滤无效的symbol（修复官方api的问题）
@@ -165,7 +158,9 @@ function renderEnglishSymbolsHtml(response, comparIndex) {
 			"wordName" : data.word_name,
 			"ph_en" : symbol.ph_en,
 			"ph_am" : symbol.ph_am,
-			"means" : means
+			"means" : means,
+			"enMp3" : symbol.ph_en_mp3,
+			"amMp3" : symbol.ph_am_mp3
 		};
 	});
 	var starType = existInWordBook == true ? "glyphicon-star"
@@ -174,7 +169,6 @@ function renderEnglishSymbolsHtml(response, comparIndex) {
 	var symbolsHtml = template.render("wordInfoEW", {
 		"symbols" : symbolsData,
 		"wordTense" : renderWordTense(data.exchange),
-		"comparisonIndex" : comparIndex,
 		"starType" : starType,
 		"starTitle" : starTitle
 	});
@@ -186,63 +180,48 @@ function renderEnglishSymbolsHtml(response, comparIndex) {
  * 在客户端渲染结束后，设置各种事件
  * 
  */
-function setClickEvent(data, comparIndex) {
-	for (var i = 0; i < data.symbols.length; i++) {
-		// 设置英式发音
-		$("#phEnPlayEW" + comparIndex + i).click({
-			index : i
-		}, function(event) {
-			playMp3(data.symbols[event.data.index].ph_en_mp3);
-		});
-		// 设置美式发音
-		$("#phAmPlayEW" + comparIndex + i).click({
-			index : i
-		}, function(event) {
-			playMp3(data.symbols[event.data.index].ph_am_mp3);
-		});
-		// 设置折叠按钮
-		$("#toggleButton" + comparIndex + i).click(
-				{
-					index : i,
-					comparIndex : comparIndex
-				},
-				function(event) {
-					if ($(
-							"#content" + event.data.comparIndex
-									+ event.data.index).hasClass("hidden")) {
-						devolopMeans(event.data.comparIndex, event.data.index);
-					} else {
-						foldMeans(event.data.comparIndex, event.data.index);
-					}
-				});
-		// 设置添加到单词本，和从单词本移除事件
-		$("#addToWordBook" + comparIndex + i).click({
-			"comparIndex" : comparIndex,
-			"index" : i
-		}, function(event) {
-			var comIndex = event.data.comparIndex;
-			var ind = event.data.index;
-			var title = $("#addToWordBook" + comIndex + ind).attr("title");
-			var word = $("#addToWordBook" + comIndex + ind).attr("word");
-			if (title == "添加到单词本") {
-				addToWordBook(word, comIndex, ind);
-			} else {
-				removeFromWordBook(word, comIndex, ind);
-			}
-		});
-	}
+function setClickEvent() {
+	// 设置英式发音
+	$(".playPhEnEW").unbind("click");
+	$(".playPhEnEW").click(function(event) {
+		playMp3($(this).find(".enMp3").text());
+	});
+	// 设置美式发音
+	$(".playPhAmEW").unbind("click");
+	$(".playPhAmEW").click(function(event) {
+		playMp3($(this).find(".amMp3").text());
+	});
+	// 设置折叠按钮
+	$(".toggleButton").unbind("click");
+	$(".toggleButton").click(function(event) {
+		var contentDiv = $(this).parent().find(".content");
+		if (contentDiv.hasClass("hidden")) {
+			devolopMeans($(this), contentDiv);
+		} else {
+			foldMeans($(this), contentDiv);
+		}
+	});
+	// 设置添加到单词本，和从单词本移除事件
+	$(".addToWordBook").unbind("click");
+	$(".addToWordBook").click(function(event) {
+		var title = $(this).attr("title");
+		var word = $(this).attr("word");
+		if (title == "添加到单词本") {
+			addToWordBook(word, $(this));
+		} else {
+			removeFromWordBook(word, $(this));
+		}
+	});
 }
 
-function removeFromWordBook(word, comIndex, ind) {
+function removeFromWordBook(word, addToWordBookA) {
 	var path = "removeWordFromWordBook" + "/" + word;
 	$.getJSON(path, function(data) {
 		$.getJSON(path, function(data) {
 			if (data.state == "success") {
-				$("#addToWordBook" + comIndex + ind).attr("title", "添加到单词本");
-				$("#addToWordBook" + comIndex + ind + ">" + "span")
-						.removeClass("glyphicon-star");
-				$("#addToWordBook" + comIndex + ind + ">" + "span").addClass(
-						"glyphicon-star-empty");
+				addToWordBookA.attr("title", "添加到单词本");
+				addToWordBookA.find("span").removeClass("glyphicon-star");
+				addToWordBookA.find("span").addClass("glyphicon-star-empty");
 			} else if (data.state = "not login") {
 				remindLogin();
 			}
@@ -250,15 +229,13 @@ function removeFromWordBook(word, comIndex, ind) {
 	});
 }
 
-function addToWordBook(word, comIndex, ind) {
+function addToWordBook(word, addToWordBookA) {
 	var path = "addWordToWordBook" + "/" + word;
 	$.getJSON(path, function(data) {
 		if (data.state == "success") {
-			$("#addToWordBook" + comIndex + ind).attr("title", "从单词本移除");
-			$("#addToWordBook" + comIndex + ind + ">" + "span").removeClass(
-					"glyphicon-star-empty");
-			$("#addToWordBook" + comIndex + ind + ">" + "span").addClass(
-					"glyphicon-star");
+			addToWordBookA.attr("title", "从单词本移除");
+			addToWordBookA.find("span").removeClass("glyphicon-star-empty");
+			addToWordBookA.find("span").addClass("glyphicon-star");
 		} else if (data.state == "not login") {
 			remindLogin();
 		}
@@ -269,20 +246,20 @@ function remindLogin() {
 	$("#remindLoginModal").modal('show');
 }
 
-function devolopMeans(comparIndex, index) {
-	$("#toggleButton" + comparIndex + index).html("∧");
-	$("#content" + comparIndex + index).removeClass("hidden");
+function devolopMeans(toggleA, contentDiv) {
+	toggleA.html("∧");
+	contentDiv.removeClass("hidden");
 }
 
-function foldMeans(comparIndex, index) {
-	$("#toggleButton" + comparIndex + index).html("∨");
-	$("#content" + comparIndex + index).addClass("hidden");
+function foldMeans(toggleA, contentDiv) {
+	toggleA.html("∨");
+	contentDiv.addClass("hidden");
 }
 
 function renderEnglishWord(response) {
-	var symbolsHtml = renderEnglishSymbolsHtml(response, $.comparisonCounter++);
+	var symbolsHtml = renderEnglishSymbolsHtml(response);
 	$("#searchEW").html(symbolsHtml);
-	setClickEvent(response.wordObject, $.comparisonCounter - 1);
+	setClickEvent();
 }
 
 function renderWordTense(tenseJson) {
@@ -336,23 +313,19 @@ function renderChineseWord(response) {
 		return {
 			"wordName" : data.word_name,
 			"wordPronounce" : symbol.word_symbol,
-			"means" : meansData
+			"means" : meansData,
+			"mp3" : symbol.symbol_mp3
 		};
 	});
 	var html = template.render("wordInfoCW", {
 		"symbols" : symbolsData
 	});
 	$("#searchCW").html(html);
-	for (var i = 0; i < data.symbols.length; i++) {
-		$("#pronounceCW" + i).click({
-			index : i
-		}, function(event) {
-			playMp3(data.symbols[event.data.index].symbol_mp3);
-		});
-	}
+	$(".playPhCW").click(function(event) {
+		playMp3($(this).find(".mp3CW").text());
+	});
 	$(".inlineWord").click(function(event) {
 		$("#searchWord").val(event.currentTarget.text);
-		console.log(event.currentTarget.text);
 		$("#searchButton").trigger("click");
 	});
 }
