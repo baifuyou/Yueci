@@ -176,5 +176,6 @@
 		</div>
 	</div>
 	<label id="searchRequestWord" class="hidden">${word }</label>
+	<div id = "wordNotFound" class = "hidden"><div class = "wordNotFoundHtml">抱歉，找不到您要找的单词！</div></div>
 </body>
 </html>

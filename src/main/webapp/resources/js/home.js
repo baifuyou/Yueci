@@ -7,6 +7,7 @@ $(function() {
 		$("title").html(word + "-阅辞");
 		$.getJSON(searchPath, function(response) {
 			if (response.wordObject.word_name == null) {
+				changeComparisonToDisabled();
 				$("#searchEW").removeClass("hidden").addClass("show");
 				$("#searchCW").removeClass("show").addClass("hidden");
 				renderWordNotFound();
@@ -36,11 +37,12 @@ $(function() {
 		$.getJSON(searchPath, function(response) {
 			var html = "";
 			if (response.wordObject.word_name == null) {
-				html = "抱歉，找不到您要找的单词！";
+				html = $("#wordNotFound").html()
 			} else {
 				html = renderEnglishSymbolsHtml(response);
 			}
-			$(html).appendTo("#searchEW");
+			//$(html).appendTo("#searchEW");
+			$("#searchEW").append(html);
 			setClickEvent(response.wordObject);
 		});
 		renderHistoryList(word);
@@ -127,10 +129,9 @@ function changeComparisonToDisabled() {
 }
 
 function renderWordNotFound() {
-	var html = template.render("wordInfoEW", [ {
-		"wordName" : "抱歉，找不到您要找的单词！"
-	} ]);
-	$("#searchEW").html("抱歉，找不到您要找的单词！");
+	var html = template.render("wordInfoEW", {});  //保证模板不丢失，在首次渲染前替换html会丢失模板
+	console.log(html);
+	$("#searchEW").html($("#wordNotFound").html());
 }
 
 function isChinese(word) {

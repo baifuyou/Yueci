@@ -28,6 +28,10 @@
 	text-decoration: none
 }
 
+.wordNotFoundHtml {
+	padding-top: 20px;
+}
+
 .pronounceButton {
 	border: 0px;
 }
