@@ -44,13 +44,6 @@
 			<div class="historyList col-md-2">
 				<h3 class="title">查询历史</h3>
 				<div class="cutOffLine"></div>
-				<script id="historyListTemplate" type="text/html">
-						<ul>
-							{{each wordNames as wordName index}}
-								<li><a>{{wordName}}</a></li>
-							{{/each}}
-						</ul>
-				</script>
 				<ul>
 				</ul>
 			</div>

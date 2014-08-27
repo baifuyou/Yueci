@@ -56,12 +56,6 @@ $(function() {
 		}
 	});
 
-	$(".historyList a").click(function(event) {
-		var wordName = $(this).text();
-		$("#searchWord").val(wordName);
-		$("#searchButton").click();
-	});
-
 	$("#gotoLogin").click(function(event) {
 		location.href = "login"
 	});
@@ -212,6 +206,13 @@ function setClickEvent() {
 		} else {
 			removeFromWordBook(word, $(this));
 		}
+	});
+	
+	$(".historyList a").unbind("click");
+	$(".historyList a").click(function(event) {
+		var wordName = $(this).text();
+		$("#searchWord").val(wordName);
+		$("#searchButton").click();
 	});
 }
 
