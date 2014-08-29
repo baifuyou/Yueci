@@ -25,7 +25,7 @@
 	type="image/x-icon">
 </head>
 <body>
-	<div class="container">
+	<div class="container mainContainer">
 		<div class="row">
 			<div id="remindLogin">
 				<c:if test="${isLogin ne true}">
@@ -61,11 +61,6 @@
 								title="Ctrl + Enter">
 						</div>
 					</form>
-				</div>
-				<div id="mp3Play">
-					<script id="mp3Template" type="text/html">
-				<object height="0" width="0" data="{{mp3}}"></object>
-			</script>
 				</div>
 				<div id="searchResult">
 					<div id="searchEW" class="hidden">
@@ -141,34 +136,51 @@
 					</div>
 				</div>
 			</div>
-		</div>
+			<div class="col-md-2 toolPanel panel panel-default">
+				<table>
+					<tr>
+						<td><span><a href="wordBook" target = "_blank">单词本</a></span></td>
+						<td><span><a href="feedback" target = "_blank">反馈</a></span></td>
+					</tr>
+				</table>
 
-
-		<div id="relatedWordCW"></div>
-		<div id="remindLoginModal" class="modal fade" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h4 class="modal-title">您还没有登陆...</h4>
-					</div>
-					<div class="modal-body">
-						<span>您需要先登录</span>
-					</div>
-					<div class="modal-footer">
-						<button id="cancel" type="button" class="btn btn-primary"
-							data-dismiss="modal">取消</button>
-						<button id="gotoLogin" type="button" class="btn btn-default">登录</button>
-						<button id="gotoRegister" type="button" class="btn btn-default">注册</button>
-					</div>
-				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-dialog -->
 		</div>
 	</div>
+
+
+	<div id="relatedWordCW"></div>
+	<div id="remindLoginModal" class="modal fade" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title">您还没有登陆...</h4>
+				</div>
+				<div class="modal-body">
+					<span>您需要先登录</span>
+				</div>
+				<div class="modal-footer">
+					<button id="cancel" type="button" class="btn btn-primary"
+						data-dismiss="modal">取消</button>
+					<button id="gotoLogin" type="button" class="btn btn-default">登录</button>
+					<button id="gotoRegister" type="button" class="btn btn-default">注册</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	</div>
 	<label id="searchRequestWord" class="hidden">${word }</label>
-	<div id = "wordNotFound" class = "hidden"><div class = "wordNotFoundHtml">抱歉，找不到您要找的单词！</div></div>
+	<div id="wordNotFound" class="hidden">
+		<div class="wordNotFoundHtml">抱歉，找不到您要找的单词！</div>
+	</div>
+	<div id="mp3Play">
+		<script id="mp3Template" type="text/html">
+				<object height="0" width="0" data="{{mp3}}"></object>
+			</script>
+	</div>
 </body>
 </html>

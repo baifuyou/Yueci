@@ -21,6 +21,11 @@ input[type="radio"] {
 	margin-right: 5px;
 }
 
+button[type="submit"] {
+	width: 800px;
+	margin-left: 150px;
+}
+
 .radio-span {
 	margin-left: 20px;
 }
