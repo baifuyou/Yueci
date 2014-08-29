@@ -10,6 +10,7 @@ import org.slf4j.*;
 import com.mongodb.*;
 import com.scratbai.yueci.commons.CommonUtils;
 import com.scratbai.yueci.pojo.*;
+import com.scratbai.yueci.service.UserServiceImpl;
 
 public class UserDaoImpl implements UserDao {
 
@@ -198,6 +199,13 @@ public class UserDaoImpl implements UserDao {
 		 Query<WordsTableItem> query =
 		 datastore.createQuery(WordsTableItem.class).filter("name", pattern).order("-frequency").limit(8);
 		return query.asList();
+	}
+
+	@Override
+	public void removeWaitAuthTimeoutUser(long timeMillis) {
+		Query<WaitAuthUser> query = datastore.createQuery(WaitAuthUser.class).filter("addDate <", new Date(timeMillis));
+		System.out.println(query.countAll());
+		datastore.delete(query);
 	}
 
 }

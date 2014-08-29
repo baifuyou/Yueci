@@ -98,6 +98,11 @@ ul li:first-child a {
 	margin-top: 48px;
 }
 
+.toolPanel {
+	background-color: #fcf8e3;
+	#dff0d8
+}
+
 td {
 	padding: 15px;
 }

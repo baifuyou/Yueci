@@ -58,4 +58,6 @@ public interface UserDao {
 
 	List<WordsTableItem> fuzzySearch(String word);
 
+	void removeWaitAuthTimeoutUser(long currentTimeMillis);
+
 }

@@ -7,4 +7,5 @@
 	<import resource="dao.xml"/>
 	<import resource="service.xml"/>
 	<import resource="controller.xml"/>
+	<import resource="quartz.xml"/>
 </beans>

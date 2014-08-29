@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private static final Executor exec = Executors.newCachedThreadPool();
-	private static final int MilliSECCONDS_OF_HOURS = 3600000;
+	//private static final int MilliSECCONDS_OF_HOURS = 3600000;
+	//private static final int EMAIL_VALID_TIMEOUT_HOURS = 12;
+	public static final int EMAIL_VALID_TIMEOUT_MillSECCONDS = 12 * 3600000; // 12个小时
 	private ObjectMapper objectMapper;
 
 	@Override
@@ -100,7 +102,7 @@ public class UserServiceImpl implements UserService {
 		Date addDate = user.getAddDate();
 		long addTime = addDate.getTime();
 		long nowTime = System.currentTimeMillis();
-		if (addTime + 12 * MilliSECCONDS_OF_HOURS < nowTime) {
+		if (addTime + EMAIL_VALID_TIMEOUT_MillSECCONDS < nowTime) {
 			logger.debug("验证超时:addTime" + addTime + ",nowTime:" + nowTime);
 			// 删除过期的待验证用户
 			userDao.removeWaitAuthUserByUid(user.getUid());;
