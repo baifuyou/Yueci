@@ -24,7 +24,9 @@ function loadWordsList(pageIndex) {
 		var nowPageIndex = data.pageIndex;
 		var pageIndexsShowed = [];
 		if (nowPageIndex > 5) {
-			pageIndexsShowed = range(nowPageIndex - 5, nowPageIndex + 5);
+			var endIndex = nowPageIndex + 5;
+			endIndex = endIndex > pageCount ? pageCount : endIndex;
+			pageIndexsShowed = range(nowPageIndex - 5, endIndex);
 		} else {
 			var start = 1;
 			var end = pageCount <= 11 ? pageCount : 11;

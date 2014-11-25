@@ -35,7 +35,7 @@ public class Login {
 		return "login";
 	}
 
-	@RequestMapping("/login")
+	@RequestMapping(value = "/login")
 	public String requestLogin(HttpSession session, Model model) {
 		Object user = session.getAttribute("user");
 		Object uid = session.getAttribute("uid");
