@@ -442,7 +442,6 @@ public class UserServiceImpl implements UserService {
 		try {
 			wordsJson = objectMapper.writer().writeValueAsString(wordsString);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return wordsJson;
