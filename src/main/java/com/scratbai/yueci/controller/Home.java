@@ -1,6 +1,7 @@
 package com.scratbai.yueci.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.servlet.http.*;
 
@@ -55,7 +56,7 @@ public class Home {
 		return home(session, model);
 	}
 
-	@RequestMapping("searchWord/{word}")
+	@RequestMapping(value = "searchWord/{word}", produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String searchWord(@PathVariable String word, HttpSession session)
 			throws UnsupportedEncodingException {
@@ -66,9 +67,9 @@ public class Home {
 				: (User) session.getAttribute("user");
 		String response = null;
 		if (user == null) {
-			response = userService.searchWord(word);
+			response = userService.searchWordFromDb(word);
 		} else {
-			response = userService.searchWord(user, word);
+			response = userService.searchWordFromDb(user, word);
 		}
 		System.out.println(response);
 		return response;

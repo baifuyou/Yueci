@@ -265,6 +265,9 @@ function renderEnglishWord(response) {
 }
 
 function renderWordTense(tenseJson) {
+	if (tenseJson == null) {
+		return "";
+	}
 	var tenseHtml = "";
 	var tensesArray = Object.keys(tenseJson).map(function(key) {
 		switch (key) {

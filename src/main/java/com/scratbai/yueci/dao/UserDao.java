@@ -59,5 +59,8 @@ public interface UserDao {
 	List<WordsTableItem> fuzzySearch(String word);
 
 	void removeWaitAuthTimeoutUser(long currentTimeMillis);
-
+	
+	EnglishWord findEnglishWord(String wordName);
+	
+	ChineseWord findChineseWord(String wordName);
 }

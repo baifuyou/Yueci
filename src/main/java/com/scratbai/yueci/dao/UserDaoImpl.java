@@ -208,4 +208,16 @@ public class UserDaoImpl implements UserDao {
 		datastore.delete(query);
 	}
 
+	@Override
+	public EnglishWord findEnglishWord(String wordName) {
+		Query<EnglishWord> query = datastore.createQuery(EnglishWord.class).filter("word_name", wordName);
+		return query.get();
+	}
+
+	@Override
+	public ChineseWord findChineseWord(String wordName) {
+		Query<ChineseWord> query = datastore.createQuery(ChineseWord.class).filter("word_name", wordName);
+		return query.get();
+	}
+
 }

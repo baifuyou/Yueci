@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scratbai.yueci.commons.CommonUtils;
 import com.scratbai.yueci.dao.UserDao;
 import com.scratbai.yueci.pojo.*;
+import org.apache.commons.lang3.*;
 
 public class UserServiceImpl implements UserService {
 
@@ -149,9 +150,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String searchWord(String word) {
 		logger.debug("not login user" + " request :" + word);
-		StringBuilder protoData = getProtoResponseData(word);
+		StringBuilder protoData = getProtoData(word);
 		protoData = regulateJson(protoData);
 		saveWordData(word, protoData);
+		StringBuilder response = buildResponse(protoData, word);
+		logger.debug(response.toString());
+		return response.toString();
+	}
+	
+	@Override
+	public String searchWordFromDb(String word) {
+		logger.debug("not login user" + " request :" + word);
+		StringBuilder protoData = getProtoDataFromDb(word);
 		StringBuilder response = buildResponse(protoData, word);
 		logger.debug(response.toString());
 		return response.toString();
@@ -180,11 +190,45 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String searchWord(User user, String word) {
 		logger.debug("user:" + user.getUid() + " request :" + word);
-		StringBuilder protoData = getProtoResponseData(word);
+		StringBuilder protoData = getProtoData(word);
 		protoData = regulateJson(protoData);
 		saveWordData(word, protoData);
 		StringBuilder response = buildWordResponse(user, protoData, word);
 		return response.toString();
+	}
+	
+	@Override
+	public String searchWordFromDb(User user, String word) {
+		logger.debug("user:" + user.getUid() + " request :" + word);
+		StringBuilder protoData = getProtoDataFromDb(word);
+		StringBuilder response = buildWordResponse(user, protoData, word);
+		return response.toString();
+	}
+	
+	private StringBuilder getProtoDataFromDb(String wordName) {
+		String result = "";
+		try {
+			if (CommonUtils.isChinese(wordName)) {
+				ChineseWord tmp = userDao.findChineseWord(wordName);
+				if (tmp == null) {
+					tmp = new ChineseWord();
+					tmp.setWord_name(null);
+				}
+				result = objectMapper.writeValueAsString(tmp);
+				Arrays.toString(result.getBytes());
+			} else {
+				EnglishWord tmp = userDao.findEnglishWord(wordName);
+				if (tmp == null) {
+					tmp = new EnglishWord();
+					tmp.setWord_name(null);
+				}
+				result = objectMapper.writeValueAsString(tmp);
+			}
+		} catch (JsonProcessingException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return new StringBuilder(StringEscapeUtils.unescapeJava(StringEscapeUtils.escapeJson(result)));
 	}
 
 	/*
@@ -205,7 +249,7 @@ public class UserServiceImpl implements UserService {
 		return newResponse;
 	}
 
-	private StringBuilder getProtoResponseData(String word) {
+	private StringBuilder getProtoData(String word) {
 		String apiKey = CommonUtils.getConfigValue("iciba.properties", "key");
 		try {
 			URL url = new URL("http://dict-co.iciba.com/api/dictionary.php?w="

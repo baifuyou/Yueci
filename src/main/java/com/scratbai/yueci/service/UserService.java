@@ -35,6 +35,8 @@ public interface UserService {
 	public boolean isWaitAuthUidExist(String uid);
 
 	public String searchWord(User user, String word);
+	
+	public String searchWordFromDb(User user, String word);
 
 	public User getUser(String uid);
 
@@ -43,6 +45,8 @@ public interface UserService {
 	public void addWordToWordBook(User user, String word);
 
 	public String searchWord(String word);
+	
+	public String searchWordFromDb(String word);
 
 	public void removeWordFromWordBook(User user, String word);
 
